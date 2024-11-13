@@ -1,0 +1,11 @@
+@canoodleapi_HostAddress = http://localhost:5208
+
+GET {{canoodleapi_HostAddress}}/todos/
+Accept: application/json
+
+###
+
+GET {{canoodleapi_HostAddress}}/todos/1
+Accept: application/json
+
+###
