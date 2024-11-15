@@ -51,19 +51,19 @@ namespace canoodleapi
             .NullValueHandling = Newtonsoft.Json.NullValueHandling.Include);
             services.AddMvc().AddViewLocalization(options => options.ResourcesPath = "Resources");
             services.AddMvc().AddMvcOptions(options => options.EnableEndpointRouting = false);
+            string[] origins = Convert.ToString(Configuration.GetSection("TokenAuthentication:Origin").Value).Split(',');
 
-            //string[] origins = Convert.ToString(Configuration.GetSection("TokenAuthentication:Origin").Value).Split(',');
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("CorsPolicy",
-            //        builder => builder.WithOrigins(origins)
-            //         .AllowAnyMethod()
-            //         .AllowAnyHeader());
-            //    options.AddPolicy("AllowAll",
-            //       builder => builder.AllowAnyOrigin()
-            //                   .AllowAnyHeader()
-            //                   .AllowAnyMethod());
-            //});
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.WithOrigins(origins)
+                     .AllowAnyMethod()
+                     .AllowAnyHeader());
+                options.AddPolicy("AllowAll",
+                   builder => builder.AllowAnyOrigin()
+                               .AllowAnyHeader()
+                               .AllowAnyMethod());
+            });
 
         }
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
