@@ -12,7 +12,7 @@ namespace canoodleapi.Controllers
         [HttpGet]
         public string Get()
         {
-            return "value1";
+            return "value3";
         }
 
         // GET api/<ValuesController>/5
