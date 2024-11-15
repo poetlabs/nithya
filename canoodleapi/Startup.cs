@@ -58,6 +58,7 @@ namespace canoodleapi
                 options.AddPolicy("CorsPolicy",
                     builder => builder.WithOrigins(origins)
                      .AllowAnyMethod()
+                     .AllowAnyHeader()
                      .AllowAnyHeader());
                 options.AddPolicy("AllowAll",
                    builder => builder.AllowAnyOrigin()
@@ -68,7 +69,7 @@ namespace canoodleapi
         }
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-
+            app.UseCors(Convert.ToString(Configuration.GetSection("TokenAuthentication:Policy").Value));
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -77,6 +78,7 @@ namespace canoodleapi
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            ConfigureAuth(app);
             app.UseMvc(routes =>
             {
 
@@ -85,6 +87,13 @@ namespace canoodleapi
                     template: "{controller=Home}/{action=Index}/{id?}");
 
             });
+
+
+        }
+        private void ConfigureAuth(IApplicationBuilder app)
+        {
+
+            app.UseAuthentication();             
 
 
         }
