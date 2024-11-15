@@ -9,5 +9,6 @@ namespace canoodleapi.Interfaces
         Task CreateCompletedActivityAsync(CompletedActivity completedActivity);
         Task UpdateCompletedActivityAsync(CompletedActivity completedActivity);
         Task DeleteCompletedActivityAsync(int completionId);
+       
     }
 }

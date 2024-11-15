@@ -1,51 +1,44 @@
 ﻿using canoodleapi.DataObjects;
 using canoodleapi.Interfaces;
 using Dapper;
+using Dapper.Contrib.Extensions;
+using Microsoft.Extensions.Options;
 
 namespace canoodleapi.Repository
 {
-    public class MaintenanceActivityRepository : IMaintenanceActivityRepository
+    public class MaintenanceActivityRepository : BaseRepository,IMaintenanceActivityRepository
     {
+        private IOptions<AppSettings> _appSettings;
+        public MaintenanceActivityRepository(IOptions<AppSettings> appSettings) : base(appSettings)
+        {
+            _appSettings = appSettings;
+        }
         private readonly DapperContext _context;
 
-        public MaintenanceActivityRepository(DapperContext context) => _context = context;
-
-        public async Task<IEnumerable<MaintenanceActivity>> GetAllActivitiesAsync()
+                  
+        public MaintenanceActivity SaveMaintenanceActivity(MaintenanceActivity maintenanceActivity)
         {
-            const string query = "SELECT * FROM MaintenanceActivities";
-            using var connection = _context.CreateConnection();
-            return await connection.QueryAsync<MaintenanceActivity>(query);
-        }
+            try
+            {
+                if (maintenanceActivity.ActivityId > 0)
+                {
+                    maintenanceActivity.updateddate = DateTime.UtcNow;
+                    SqlMapperExtensions.Update(con, maintenanceActivity);
+                }
+                else
+                {
+                    maintenanceActivity.updateddate = DateTime.UtcNow;
+                    maintenanceActivity.ActivityId = (int)SqlMapperExtensions.Insert(con, maintenanceActivity);
 
-        public async Task<MaintenanceActivity> GetActivityByIdAsync(string activityId)
-        {
-            const string query = "SELECT * FROM MaintenanceActivities WHERE ActivityId = @ActivityId";
-            using var connection = _context.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<MaintenanceActivity>(query, new { ActivityId = activityId });
-        }
+                }
+                return maintenanceActivity;
 
-        public async Task CreateActivityAsync(MaintenanceActivity activity)
-        {
-            const string query = @"INSERT INTO MaintenanceActivities (ActivityId, MachineId, Description, DueDate, Status, LastCompleted, ActivityType, Min, Max) 
-                               VALUES (@ActivityId, @MachineId, @Description, @DueDate, @Status, @LastCompleted, @ActivityType, @Min, @Max)";
-            using var connection = _context.CreateConnection();
-            await connection.ExecuteAsync(query, activity);
-        }
 
-        public async Task UpdateActivityAsync(MaintenanceActivity activity)
-        {
-            const string query = @"UPDATE MaintenanceActivities SET MachineId = @MachineId, Description = @Description, DueDate = @DueDate, 
-                               Status = @Status, LastCompleted = @LastCompleted, ActivityType = @ActivityType, Min = @Min, Max = @Max 
-                               WHERE ActivityId = @ActivityId";
-            using var connection = _context.CreateConnection();
-            await connection.ExecuteAsync(query, activity);
-        }
-
-        public async Task DeleteActivityAsync(string activityId)
-        {
-            const string query = "DELETE FROM MaintenanceActivities WHERE ActivityId = @ActivityId";
-            using var connection = _context.CreateConnection();
-            await connection.ExecuteAsync(query, new { ActivityId = activityId });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

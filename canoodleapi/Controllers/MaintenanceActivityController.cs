@@ -1,51 +1,65 @@
 ﻿using canoodleapi.DataObjects;
 using canoodleapi.Interfaces;
+using canoodleapi.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Enum = System.Enum;
 
-[ApiController]
-[Route("api/[controller]")]
+[Produces("application/json")]
+[Route("api/MaintenanceActivity")]
 public class MaintenanceActivityController : ControllerBase
 {
+    ApiResponseModel apiResponse;
+    ResultResponseModel resultResponse;
+    string _jsonData = string.Empty;
     private readonly IMaintenanceActivityRepository _activityRepository;
 
     public MaintenanceActivityController(IMaintenanceActivityRepository activityRepository)
     {
         _activityRepository = activityRepository;
+        resultResponse = new ResultResponseModel();
+        apiResponse = new ApiResponseModel();
+        apiResponse.Result = new ResultResponseModel();
     }
-
-    [HttpGet]
-    public async Task<IActionResult> GetAllActivities()
-    {
-        var activities = await _activityRepository.GetAllActivitiesAsync();
-        return Ok(activities);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetActivityById(string id)
-    {
-        var activity = await _activityRepository.GetActivityByIdAsync(id);
-        return activity is null ? NotFound() : Ok(activity);
-    }
-
     [HttpPost]
-    public async Task<IActionResult> CreateActivity([FromBody] MaintenanceActivity activity)
+    [Route("SaveMaintenanceActivity")]
+    public ApiResponseModel SaveMaintenanceActivity([FromBody] MaintenanceActivity maintenanceActivity)
     {
-        await _activityRepository.CreateActivityAsync(activity);
-        return CreatedAtAction(nameof(GetActivityById), new { id = activity.ActivityId }, activity);
-    }
+        try
+        {
+            if (maintenanceActivity != null)
+            {
+                _jsonData = JsonConvert.SerializeObject(maintenanceActivity);                
+                maintenanceActivity = _activityRepository.SaveMaintenanceActivity(maintenanceActivity);
+                _jsonData = string.Empty;
+                if (maintenanceActivity != null)
+                {
+                    resultResponse.Data = maintenanceActivity;
+                    resultResponse.IsError = false;
+                    _jsonData = JsonConvert.SerializeObject(maintenanceActivity);
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateActivity(int id, [FromBody] MaintenanceActivity activity)
-    {
-        if (id != activity.ActivityId) return BadRequest();
-        await _activityRepository.UpdateActivityAsync(activity);
-        return NoContent();
-    }
+                }
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoDataReceived);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteActivity(string id)
-    {
-        await _activityRepository.DeleteActivityAsync(id);
-        return NoContent();
+
+            }
+        }
+        catch (Exception ex)
+        {
+
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
     }
+    
 }

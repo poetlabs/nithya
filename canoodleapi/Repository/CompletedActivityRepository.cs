@@ -1,15 +1,22 @@
 ﻿using canoodleapi.DataObjects;
 using canoodleapi.Interfaces;
 using Dapper;
+using Dapper.Contrib.Extensions;
+using Microsoft.Extensions.Options;
 
 namespace canoodleapi.Repository
 {
 
-    public class CompletedActivityRepository : ICompletedActivityRepository
+    public class CompletedActivityRepository : BaseRepository,ICompletedActivityRepository
     {
+        private IOptions<AppSettings> _appSettings;
+        public CompletedActivityRepository(IOptions<AppSettings> appSettings) : base(appSettings)
+        {
+            _appSettings = appSettings;
+        }
         private readonly DapperContext _context;
 
-        public CompletedActivityRepository(DapperContext context) => _context = context;
+       // public CompletedActivityRepository(DapperContext context) => _context = context;
 
         public async Task<IEnumerable<CompletedActivity>> GetAllCompletedActivitiesAsync()
         {
@@ -47,5 +54,6 @@ namespace canoodleapi.Repository
             using var connection = _context.CreateConnection();
             await connection.ExecuteAsync(query, new { CompletionId = completionId });
         }
+        
     }
 }

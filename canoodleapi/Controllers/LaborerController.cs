@@ -1,51 +1,67 @@
 ﻿using canoodleapi.DataObjects;
 using canoodleapi.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Enum = System.Enum;
 
-[ApiController]
-[Route("api/[controller]")]
+[Produces("application/json")]
+[Route("api/Laborer")]
 public class LaborerController : ControllerBase
 {
+    ApiResponseModel apiResponse;
+    ResultResponseModel resultResponse;
+    string _jsonData = string.Empty;
     private readonly ILaborerRepository _laborerRepository;
 
     public LaborerController(ILaborerRepository laborerRepository)
     {
         _laborerRepository = laborerRepository;
+        resultResponse = new ResultResponseModel();
+        apiResponse = new ApiResponseModel();
+        apiResponse.Result = new ResultResponseModel();
     }
-
-    [HttpGet]
-    public async Task<IActionResult> GetAllLaborers()
-    {
-        var laborers = await _laborerRepository.GetAllLaborersAsync();
-        return Ok(laborers);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetLaborerById(string id)
-    {
-        var laborer = await _laborerRepository.GetLaborerByIdAsync(id);
-        return laborer is null ? NotFound() : Ok(laborer);
-    }
+      
 
     [HttpPost]
-    public async Task<IActionResult> CreateLaborer([FromBody] Laborer laborer)
-    {
-        await _laborerRepository.CreateLaborerAsync(laborer);
-        return CreatedAtAction(nameof(GetLaborerById), new { id = laborer.LaborerId }, laborer);
-    }
+    [Route("SaveLaborers")]
+    public ApiResponseModel SaveLaborers([FromBody] Laborers laborer)
+    {       
+        try
+        {
+            if (laborer!=null)
+            {
+                _jsonData = JsonConvert.SerializeObject(laborer);        
+                             
+                laborer = _laborerRepository.SaveLaborers(laborer);                               
+                _jsonData = string.Empty;
+                if (laborer != null)
+                {
+                    resultResponse.Data = laborer;
+                    resultResponse.IsError = false;
+                    _jsonData = JsonConvert.SerializeObject(laborer);
+                    
+                }
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoDataReceived);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+                
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateLaborer(int id, [FromBody] Laborer laborer)
-    {
-        if (id != laborer.LaborerId) return BadRequest();
-        await _laborerRepository.UpdateLaborerAsync(laborer);
-        return NoContent();
-    }
+            }
+        }
+        catch (Exception ex)
+        {
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteLaborer(string id)
-    {
-        await _laborerRepository.DeleteLaborerAsync(id);
-        return NoContent();
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+         return apiResponse;
     }
+  
 }

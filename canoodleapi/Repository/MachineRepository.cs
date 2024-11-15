@@ -1,48 +1,60 @@
 ﻿using canoodleapi.DataObjects;
 using canoodleapi.Interfaces;
 using Dapper;
+using Dapper.Contrib.Extensions;
+using Microsoft.Extensions.Options;
 
 namespace canoodleapi.Repository
 {
-    public class MachineRepository : IMachineRepository
+    public class MachineRepository : BaseRepository, IMachineRepository
     {
+        private IOptions<AppSettings> _appSettings;
+        public MachineRepository(IOptions<AppSettings> appSettings) : base(appSettings)
+        {
+            _appSettings = appSettings;
+        }
         private readonly DapperContext _context;
 
-        public MachineRepository(DapperContext context) => _context = context;
-
-        public async Task<IEnumerable<Machine>> GetAllMachinesAsync()
+        public Machines SaveMachines(Machines machines)
         {
-            const string query = "SELECT * FROM Machines";
-            using var connection = _context.CreateConnection();
-            return await connection.QueryAsync<Machine>(query);
+            try
+            {
+                if (machines.MachineId > 0)
+                {
+                    machines.Updateddate = DateTime.UtcNow;
+                    SqlMapperExtensions.Update(con, machines);
+                }
+                else
+                {
+                    machines.Updateddate = DateTime.UtcNow;
+                    machines.MachineId = (int)SqlMapperExtensions.Insert(con, machines);
+
+                }
+                return machines;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public List<Machines> GetAllMachines()
+        {
+            List<Machines> lstmachines = new List<Machines>();
+            try
+            {
+                string sql = "SELECT * FROM Machines";
+                lstmachines = con.Query<Machines>(sql).AsList();
+                return lstmachines;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return lstmachines;
+
         }
 
-        public async Task<Machine> GetMachineByIdAsync(string machineId)
-        {
-            const string query = "SELECT * FROM Machines WHERE MachineId = @MachineId";
-            using var connection = _context.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<Machine>(query, new { MachineId = machineId });
-        }
-
-        public async Task CreateMachineAsync(Machine machine)
-        {
-            const string query = "INSERT INTO Machines (MachineId, RouteId, Name, Location) VALUES (@MachineId, @RouteId, @Name, @Location)";
-            using var connection = _context.CreateConnection();
-            await connection.ExecuteAsync(query, machine);
-        }
-
-        public async Task UpdateMachineAsync(Machine machine)
-        {
-            const string query = "UPDATE Machines SET RouteId = @RouteId, Name = @Name, Location = @Location WHERE MachineId = @MachineId";
-            using var connection = _context.CreateConnection();
-            await connection.ExecuteAsync(query, machine);
-        }
-
-        public async Task DeleteMachineAsync(string machineId)
-        {
-            const string query = "DELETE FROM Machines WHERE MachineId = @MachineId";
-            using var connection = _context.CreateConnection();
-            await connection.ExecuteAsync(query, new { MachineId = machineId });
-        }
     }
 }

@@ -1,50 +1,47 @@
 ﻿using canoodleapi.DataObjects;
 using canoodleapi.Interfaces;
 using Dapper;
+using Dapper.Contrib.Extensions;
+using Microsoft.Extensions.Options;
+using System.Reflection.PortableExecutable;
 
 namespace canoodleapi.Repository
 {
-    public class LaborerRepository : ILaborerRepository
+    public class LaborerRepository : BaseRepository,ILaborerRepository
     {
+        private IOptions<AppSettings> _appSettings;
+        public LaborerRepository(IOptions<AppSettings> appSettings) : base(appSettings)
+        {
+            _appSettings = appSettings;
+        }
+
         private readonly DapperContext _context;
 
-        public LaborerRepository(DapperContext context) => _context = context;
-
-        public async Task<IEnumerable<Laborer>> GetAllLaborersAsync()
+        public Laborers SaveLaborers(Laborers laborer)
         {
-            const string query = "SELECT * FROM Laborers";
-            using var connection = _context.CreateConnection();
-            return await connection.QueryAsync<Laborer>(query);
-        }
+            try
+            {
+                if (laborer.LaborerId > 0)
+                {
+                    laborer.updateddate = DateTime.UtcNow;
+                    SqlMapperExtensions.Update(con, laborer);
+                }
+                else
+                {
+                    laborer.updateddate = DateTime.UtcNow;
+                    laborer.StartedAt = DateTime.UtcNow;
+                    laborer.LaborerId = (int)SqlMapperExtensions.Insert(con, laborer);
 
-        public async Task<Laborer> GetLaborerByIdAsync(string laborerId)
-        {
-            const string query = "SELECT * FROM Laborers WHERE LaborerId = @LaborerId";
-            using var connection = _context.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<Laborer>(query, new { LaborerId = laborerId });
-        }
+                }
+                return laborer;
 
-        public async Task CreateLaborerAsync(Laborer laborer)
-        {
-            const string query = @"INSERT INTO Laborers (LaborerId, Name, CurrentRoute, JourneyStatus, StartedAt) 
-                               VALUES (@LaborerId, @Name, @CurrentRoute, @JourneyStatus, @StartedAt)";
-            using var connection = _context.CreateConnection();
-            await connection.ExecuteAsync(query, laborer);
-        }
 
-        public async Task UpdateLaborerAsync(Laborer laborer)
-        {
-            const string query = @"UPDATE Laborers SET Name = @Name, CurrentRoute = @CurrentRoute, 
-                               JourneyStatus = @JourneyStatus, StartedAt = @StartedAt WHERE LaborerId = @LaborerId";
-            using var connection = _context.CreateConnection();
-            await connection.ExecuteAsync(query, laborer);
-        }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
-        public async Task DeleteLaborerAsync(string laborerId)
-        {
-            const string query = "DELETE FROM Laborers WHERE LaborerId = @LaborerId";
-            using var connection = _context.CreateConnection();
-            await connection.ExecuteAsync(query, new { LaborerId = laborerId });
         }
     }
 }

@@ -3,48 +3,60 @@
     using canoodleapi.DataObjects;
     using canoodleapi.Interfaces;
     using Dapper;
-    public class RouteRepository : IRouteRepository
+    using Dapper.Contrib.Extensions;
+    using Microsoft.AspNetCore.Routing;
+    using Microsoft.Extensions.Options;
+    using System.Data;
+
+    public class RouteRepository : BaseRepository,IRouteRepository
     {
-        private readonly DapperContext _context;
-
-        public RouteRepository(DapperContext context)
+        private IOptions<AppSettings> _appSettings;
+        public RouteRepository(IOptions<AppSettings> appSettings) : base(appSettings)
         {
-            _context = context;
+            _appSettings = appSettings;
         }
+        private readonly DapperContext _context;          
 
-        public async Task<IEnumerable<Routes>> GetAllRoutesAsync()
+        public Routes SaveRoutes(Routes routes)
         {
-            var query = "SELECT * FROM Routes";
-            using var connection = _context.CreateConnection();
-            return await connection.QueryAsync<Routes>(query);
+            try
+            {  
+
+                if (routes.RouteId > 0)
+                {
+                    routes.Updateddate = DateTime.UtcNow;
+                    SqlMapperExtensions.Update(con, routes);
+                }
+                else
+                {
+                    routes.Updateddate = DateTime.UtcNow;
+                    int id = (int)SqlMapperExtensions.Insert(con, routes);
+                 
+                }
+                return routes;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
-
-        public async Task<Routes> GetRouteByIdAsync(string routeId)
+        public List<Routes> GetAllRoutes()
         {
-            var query = "SELECT * FROM Routes WHERE RouteId = @RouteId";
-            using var connection = _context.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<Routes>(query, new { RouteId = routeId });
-        }
+            List<Routes> lstmachines = new List<Routes>();
+            try
+            {
+                string sql = "SELECT * FROM Routes";
+                lstmachines = con.Query<Routes>(sql).AsList();
+                return lstmachines;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return lstmachines;
 
-        public async Task CreateRouteAsync(Routes route)
-        {
-            var query = "INSERT INTO Routes (RouteId, RouteName) VALUES (@RouteId, @RouteName)";
-            using var connection = _context.CreateConnection();
-            await connection.ExecuteAsync(query, route);
-        }
-
-        public async Task UpdateRouteAsync(Routes route)
-        {
-            var query = "UPDATE Routes SET RouteName = @RouteName WHERE RouteId = @RouteId";
-            using var connection = _context.CreateConnection();
-            await connection.ExecuteAsync(query, route);
-        }
-
-        public async Task DeleteRouteAsync(string routeId)
-        {
-            var query = "DELETE FROM Routes WHERE RouteId = @RouteId";
-            using var connection = _context.CreateConnection();
-            await connection.ExecuteAsync(query, new { RouteId = routeId });
         }
     }
 
