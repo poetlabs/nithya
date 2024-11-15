@@ -43,6 +43,7 @@ namespace canoodleapi
             services.AddTransient<ILaborerRepository, LaborerRepository>();
             services.AddTransient<IMachineRepository, MachineRepository>();
             services.AddTransient<IRouteRepository, RouteRepository>();
+            services.AddTransient<IMaintenanceActivityRepository, MaintenanceActivityRepository>();
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddMemoryCache();
             services.AddControllers()

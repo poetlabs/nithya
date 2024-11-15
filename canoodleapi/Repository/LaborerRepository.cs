@@ -3,6 +3,7 @@ using canoodleapi.Interfaces;
 using Dapper;
 using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Options;
+using System.Net;
 using System.Reflection.PortableExecutable;
 
 namespace canoodleapi.Repository
@@ -28,6 +29,7 @@ namespace canoodleapi.Repository
                 }
                 else
                 {
+                    laborer.mcjourneystatusid = Convert.ToInt32(Status.Active);
                     laborer.updateddate = DateTime.UtcNow;
                     laborer.StartedAt = DateTime.UtcNow;
                     laborer.LaborerId = (int)SqlMapperExtensions.Insert(con, laborer);
@@ -41,6 +43,26 @@ namespace canoodleapi.Repository
             {
                 throw ex;
             }
+
+        }
+        public bool GetlaborerbyUsername(string username, int qpin)
+        {
+            try
+            {
+                bool isuserexist = false;
+                string sql = "select * from Laborers where username = @username and qpin = @qpin and mcjourneystatusid =@mcjourneystatusid";
+                Laborers lbr = con.Query<Laborers>(sql, new { username = username, qpin= qpin, mcjourneystatusid=Convert.ToInt32(Status.Active) }).FirstOrDefault();
+                if (lbr!=null)
+                {
+                    isuserexist = true;
+                }
+                return isuserexist;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
 
         }
     }

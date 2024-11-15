@@ -40,5 +40,23 @@ namespace canoodleapi.Repository
                 throw ex;
             }
         }
+
+        public List<MasterCommon> GetCommonmasterbytypeid(int mcommontypeid)
+        {
+            try
+            {
+                List<MasterCommon> lstmcommon = new List<MasterCommon>();
+                string sql = "select * from MasterCommon where mcommontypeid =@mcommontypeid";
+                lstmcommon = con.Query<MasterCommon>(sql, new { mcommontypeid= mcommontypeid }).ToList();
+            
+                return lstmcommon;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }
     }
 }

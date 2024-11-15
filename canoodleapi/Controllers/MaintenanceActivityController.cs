@@ -61,5 +61,44 @@ public class MaintenanceActivityController : ControllerBase
         _jsonData = JsonConvert.SerializeObject(apiResponse);
         return apiResponse;
     }
-    
+    [HttpGet]
+    [Route("GetCommonmasterbytypeid/{mcommontypeid}")]
+    public ApiResponseModel GetCommonmasterbytypeid(int mcommontypeid)
+    {
+        List<MasterCommon> lstmasterCommon = new List<MasterCommon>();
+        try
+        {
+            lstmasterCommon = _activityRepository.GetCommonmasterbytypeid(mcommontypeid);
+            _jsonData = string.Empty;
+            if (lstmasterCommon != null)
+            {
+                resultResponse.Data = lstmasterCommon;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(lstmasterCommon);
+
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+
+    }
+
 }

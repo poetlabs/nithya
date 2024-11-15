@@ -6,6 +6,7 @@ namespace canoodleapi.Interfaces
     {
         
         MaintenanceActivity SaveMaintenanceActivity(MaintenanceActivity maintenanceActivity);
+        List<MasterCommon> GetCommonmasterbytypeid(int mcommontypeid);
     }
 
 }
