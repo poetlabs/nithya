@@ -4,8 +4,8 @@ namespace canoodleapi.Interfaces
 {
     public interface IMaintenanceActivityRepository
     {
-        
-        MaintenanceActivity SaveMaintenanceActivity(MaintenanceActivity maintenanceActivity);
+
+        MaintenanceActivities SaveMaintenanceActivity(MaintenanceActivities maintenanceActivity);
         List<MasterCommon> GetCommonmasterbytypeid(int mcommontypeid);
     }
 

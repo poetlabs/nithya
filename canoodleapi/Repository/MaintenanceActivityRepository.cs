@@ -16,7 +16,7 @@ namespace canoodleapi.Repository
         private readonly DapperContext _context;
 
                   
-        public MaintenanceActivity SaveMaintenanceActivity(MaintenanceActivity maintenanceActivity)
+        public MaintenanceActivities SaveMaintenanceActivity(MaintenanceActivities maintenanceActivity)
         {
             try
             {
@@ -30,10 +30,27 @@ namespace canoodleapi.Repository
                     maintenanceActivity.updateddate = DateTime.UtcNow;
                     maintenanceActivity.ActivityId = (int)SqlMapperExtensions.Insert(con, maintenanceActivity);
 
+                    if (maintenanceActivity.IsSubActivityAvilable == 1)
+                    {
+                        maintenanceActivity.SubActivitieslist.ForEach(delegate (SubActivity subActivity)
+                        {
+                            if (subActivity.SubActivityId > 0)
+                            {
+                                SqlMapperExtensions.Update(con, subActivity);
+                            }
+                            else
+                            {
+                                subActivity.ActivityId = maintenanceActivity.ActivityId;
+                                subActivity.SubActivityId = (int)SqlMapperExtensions.Insert(con, subActivity);
+                            }
+                        });
+
+                    }
+                   
+
+
                 }
                 return maintenanceActivity;
-
-
             }
             catch (Exception ex)
             {

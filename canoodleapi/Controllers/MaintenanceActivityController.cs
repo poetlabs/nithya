@@ -23,7 +23,7 @@ public class MaintenanceActivityController : ControllerBase
     }
     [HttpPost]
     [Route("SaveMaintenanceActivity")]
-    public ApiResponseModel SaveMaintenanceActivity([FromBody] MaintenanceActivity maintenanceActivity)
+    public ApiResponseModel SaveMaintenanceActivity([FromBody] MaintenanceActivities maintenanceActivity)
     {
         try
         {
