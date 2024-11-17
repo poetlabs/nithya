@@ -28,14 +28,14 @@ public class SubActivityController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateSubActivity([FromBody] SubActivity subActivity)
+    public async Task<IActionResult> CreateSubActivity([FromBody] SubActivities subActivity)
     {
         await _subActivityRepository.CreateSubActivityAsync(subActivity);
         return CreatedAtAction(nameof(GetSubActivityById), new { id = subActivity.SubActivityId }, subActivity);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateSubActivity(int id, [FromBody] SubActivity subActivity)
+    public async Task<IActionResult> UpdateSubActivity(int id, [FromBody] SubActivities subActivity)
     {
         if (id != subActivity.SubActivityId) return BadRequest();
         await _subActivityRepository.UpdateSubActivityAsync(subActivity);

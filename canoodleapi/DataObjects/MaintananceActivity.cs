@@ -15,12 +15,15 @@ namespace canoodleapi.DataObjects
         public int mcactivityTypeId { get; set; }
         public int? Min { get; set; }
         public int? Max { get; set; }
+        public int? SpecificDayOfWeek { get; set; }
+        public int? SpecificDayOfMonth { get; set; }
+        public int? SpecificTime { get; set; }
         public DateTime updateddate { get; set; }
         public int? mcintervalid { get; set; }
         [Write(false)]
         public int IsSubActivityAvilable { get; set; }
         [Write(false)]
-        public List<SubActivity> SubActivitieslist { get; set; }
+        public List<SubActivities> SubActivitieslist { get; set; }
 
     }
 }

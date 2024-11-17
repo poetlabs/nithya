@@ -10,21 +10,21 @@ namespace canoodleapi.Repository
 
         public SubActivityRepository(DapperContext context) => _context = context;
 
-        public async Task<IEnumerable<SubActivity>> GetAllSubActivitiesAsync()
+        public async Task<IEnumerable<SubActivities>> GetAllSubActivitiesAsync()
         {
             const string query = "SELECT * FROM SubActivities";
             using var connection = _context.CreateConnection();
-            return await connection.QueryAsync<SubActivity>(query);
+            return await connection.QueryAsync<SubActivities>(query);
         }
 
-        public async Task<SubActivity> GetSubActivityByIdAsync(string subActivityId)
+        public async Task<SubActivities> GetSubActivityByIdAsync(string subActivityId)
         {
             const string query = "SELECT * FROM SubActivities WHERE SubActivityId = @SubActivityId";
             using var connection = _context.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<SubActivity>(query, new { SubActivityId = subActivityId });
+            return await connection.QuerySingleOrDefaultAsync<SubActivities>(query, new { SubActivityId = subActivityId });
         }
 
-        public async Task CreateSubActivityAsync(SubActivity subActivity)
+        public async Task CreateSubActivityAsync(SubActivities subActivity)
         {
             const string query = @"INSERT INTO SubActivities (SubActivityId, ActivityId, Description, Status, LastChecked) 
                                VALUES (@SubActivityId, @ActivityId, @Description, @Status, @LastChecked)";
@@ -32,7 +32,7 @@ namespace canoodleapi.Repository
             await connection.ExecuteAsync(query, subActivity);
         }
 
-        public async Task UpdateSubActivityAsync(SubActivity subActivity)
+        public async Task UpdateSubActivityAsync(SubActivities subActivity)
         {
             const string query = @"UPDATE SubActivities SET ActivityId = @ActivityId, Description = @Description, 
                                Status = @Status, LastChecked = @LastChecked WHERE SubActivityId = @SubActivityId";
