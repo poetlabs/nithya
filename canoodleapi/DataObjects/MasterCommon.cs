@@ -8,6 +8,7 @@ namespace canoodleapi.DataObjects
         [Key]
         public int Mcommonid { get; set; }
         public string Mcommonname { get; set; }
+        public string Choosen { get; set; }
         public int mcommontypeid { get; set; }
     }
 }

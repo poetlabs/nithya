@@ -77,30 +77,31 @@ namespace canoodleapi.Repository
 
         }
 
-        //public List<MaintenanceActivities> GetAllMaintanceactivityForHomescrren()
-        //{
-        //    try
-        //    {
-        //        List<MaintenanceActivities> lstmcommon = new List<MaintenanceActivities>();
+        public List<MaintenanceActivities> GetAllMaintanceactivityForHomescrren()
+        {
+            try
+            {
+                List<MaintenanceActivities> lstmcommon = new List<MaintenanceActivities>();
 
-        //        TimeSpan CurrentTime = DateTime.Now.TimeOfDay;
-        //        int CurrentDayOfWeek = (int)DateTime.Now.DayOfWeek;
-        //        int currentday = (int)DateTime.Now.Day;
+                TimeSpan CurrentTime = DateTime.Now.TimeOfDay;
+                int CurrentDayOfWeek = (int)DateTime.Now.DayOfWeek;
+                int currentday = (int)DateTime.Now.Day;
+                DateTime CurrentDateTime = DateTime.Now;
 
-        //        string sql = "SELECT * FROM MaintenanceActivities WHERE (mcintervalid = 3 AND CAST(SpecificTime AS TIME) = @CurrentTime )" +
-        //            " OR (mcintervalid = 4 AND SpecificDayOfWeek = @CurrentDayOfWeek) OR (mcintervalid = 5 AND SpecificDayOfMonth = @currentday AND ) " +
-        //            " OR (mcintervalid = 6 AND (DATEPART(YEAR, @CurrentDateTime) - DATEPART(YEAR, LastRunDate)) = 1 AND " +
-        //            " SpecificDayOfMonth = @currentday) ";
-        //        lstmcommon = con.Query<MaintenanceActivities>(sql, new { CurrentTime = CurrentTime, CurrentDayOfWeek= CurrentDayOfWeek, currentday = currentday }).ToList();
+                string sql = "SELECT * FROM MaintenanceActivities WHERE (mcintervalid = 3 AND CAST(SpecificTime AS TIME) = @CurrentTime )" +
+                    " OR (mcintervalid = 4 AND SpecificDayOfWeek = @CurrentDayOfWeek) OR (mcintervalid = 5 AND SpecificDayOfMonth = @currentday AND ) " +
+                    " OR (mcintervalid = 6 AND (DATEPART(YEAR, @CurrentDateTime) - DATEPART(YEAR, (select top 1 updateddate from CompletedActivities where activityId=1 order by 1 desc))) = 1 AND " +
+                    " SpecificDayOfMonth = @currentday) ";
+                lstmcommon = con.Query<MaintenanceActivities>(sql, new { CurrentTime = CurrentTime, CurrentDayOfWeek = CurrentDayOfWeek, currentday = currentday, CurrentDateTime= CurrentDateTime }).ToList();
 
-        //        return lstmcommon;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
+                return lstmcommon;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
 
-        //}
+        }
     }
 }
