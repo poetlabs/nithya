@@ -52,7 +52,7 @@ namespace canoodleapi.Repository
             using var connection = _context.CreateConnection();
             await connection.ExecuteAsync(query, new { SubActivityId = subActivityId });
         }
-        public List<SubActivities> GetSubActivitybyActivityIDid(int activityID)
+        public List<SubActivities> GetSubActivitybyActivityid(int activityID)
         {
             try
             {
