@@ -2,6 +2,7 @@
 using canoodleapi.Interfaces;
 using Dapper;
 using Dapper.Contrib.Extensions;
+using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.Extensions.Options;
 
 namespace canoodleapi.Repository
@@ -26,8 +27,9 @@ namespace canoodleapi.Repository
                     SqlMapperExtensions.Update(con, maintenanceActivity);
                 }
                 else
-                {
+                {    
                     maintenanceActivity.updateddate = DateTime.UtcNow;
+                    maintenanceActivity.SpecificTime = "12:01:00.0000000";
                     maintenanceActivity.ActivityId = (int)SqlMapperExtensions.Insert(con, maintenanceActivity);
 
                     if (maintenanceActivity.IsSubActivityAvilable == 1)
