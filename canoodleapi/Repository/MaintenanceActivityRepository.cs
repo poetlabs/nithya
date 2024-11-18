@@ -105,5 +105,22 @@ namespace canoodleapi.Repository
 
 
         }
+        public List<SubActivities> GetSubActivitybyActivityid(int activityID)
+        {
+            try
+            {
+                List<SubActivities> lstmcommon = new List<SubActivities>();
+                string sql = "select * from SubActivities where activityId =@activityID";
+                lstmcommon = con.Query<SubActivities>(sql, new { activityID = activityID }).ToList();
+
+                return lstmcommon;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }
     }
 }

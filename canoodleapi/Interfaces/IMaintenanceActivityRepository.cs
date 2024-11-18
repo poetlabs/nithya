@@ -8,6 +8,7 @@ namespace canoodleapi.Interfaces
         MaintenanceActivities SaveMaintenanceActivity(MaintenanceActivities maintenanceActivity);
         List<MasterCommon> GetCommonmasterbytypeid(int mcommontypeid);
         List<MaintenanceActivities> GetAllMaintanceactivityForHomescrren();
+        List<SubActivities> GetSubActivitybyActivityid(int activityID);
     }
 
 }
