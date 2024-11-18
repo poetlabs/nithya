@@ -17,7 +17,7 @@ namespace canoodleapi.DataObjects
         public int? Max { get; set; }
         public int? SpecificDayOfWeek { get; set; }
         public int? SpecificDayOfMonth { get; set; }
-        public int? SpecificTime { get; set; }
+        public DateTime? SpecificTime { get; set; }
         public DateTime updateddate { get; set; }
         public int? mcintervalid { get; set; }
         [Write(false)]
