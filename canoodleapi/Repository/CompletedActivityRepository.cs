@@ -65,8 +65,7 @@ namespace canoodleapi.Repository
                     SqlMapperExtensions.Update(con, completedActivities);
                 }
                 else
-                {
-                    completedActivities.mcStatusID =Convert.ToInt32(CompletedActivitiesStatus.Active);
+                {                    
                     completedActivities.updateddate = DateTime.UtcNow;
                     completedActivities.CompletionId = (int)SqlMapperExtensions.Insert(con, completedActivities);
 
