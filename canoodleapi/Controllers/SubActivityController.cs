@@ -14,9 +14,10 @@ public class SubActivityController : ControllerBase
     private readonly ISubActivityRepository _subActivityRepository;
 
     public SubActivityController(ISubActivityRepository subActivityRepository)
-    {   ApiResponseModel apiResponse;
-        ResultResponseModel resultResponse;
-        string _jsonData = string.Empty;
+    {
+        resultResponse = new ResultResponseModel();
+        apiResponse = new ApiResponseModel();
+        apiResponse.Result = new ResultResponseModel();
         _subActivityRepository = subActivityRepository;
     }
 
@@ -65,7 +66,7 @@ public class SubActivityController : ControllerBase
         {
             lstsubactivities = _subActivityRepository.GetSubActivitybyActivityid(activityID);
             _jsonData = string.Empty;
-            if (lstsubactivities != null)
+            if (lstsubactivities.Count>0)
             {
                 resultResponse.Data = lstsubactivities;
                 resultResponse.IsError = false;
