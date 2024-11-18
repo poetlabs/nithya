@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Enum = System.Enum;
 
-[ApiController]
-[Route("api/[controller]")]
+[Produces("application/json")]
+[Route("api/CompletedActivity")]
 public class CompletedActivityController : ControllerBase
 {
     ApiResponseModel apiResponse;
