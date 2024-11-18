@@ -1,14 +1,20 @@
 ﻿using canoodleapi.DataObjects;
 using canoodleapi.Interfaces;
 using Dapper;
+using Microsoft.Extensions.Options;
 
 namespace canoodleapi.Repository
 {
-    public class SubActivityRepository : ISubActivityRepository
+    public class SubActivityRepository : BaseRepository,ISubActivityRepository
     {
+        private IOptions<AppSettings> _appSettings;
+        public SubActivityRepository(IOptions<AppSettings> appSettings) : base(appSettings)
+        {
+            _appSettings = appSettings;
+        }
         private readonly DapperContext _context;
 
-        public SubActivityRepository(DapperContext context) => _context = context;
+      //  public SubActivityRepository(DapperContext context) => _context = context;
 
         public async Task<IEnumerable<SubActivities>> GetAllSubActivitiesAsync()
         {
@@ -46,5 +52,24 @@ namespace canoodleapi.Repository
             using var connection = _context.CreateConnection();
             await connection.ExecuteAsync(query, new { SubActivityId = subActivityId });
         }
+        public List<SubActivities> GetSubActivitybyActivityIDid(int activityID)
+        {
+            try
+            {
+                List<SubActivities> lstmcommon = new List<SubActivities>();
+                string sql = "select * from SubActivities where activityId =@activityID";
+                lstmcommon = con.Query<SubActivities>(sql, new { activityID = activityID }).ToList();
+
+                return lstmcommon;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }
+
+
     }
 }

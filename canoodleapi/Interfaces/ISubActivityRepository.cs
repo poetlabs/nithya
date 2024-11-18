@@ -9,5 +9,6 @@ namespace canoodleapi.Interfaces
         Task CreateSubActivityAsync(SubActivities subActivity);
         Task UpdateSubActivityAsync(SubActivities subActivity);
         Task DeleteSubActivityAsync(string subActivityId);
+        List<SubActivities> GetSubActivitybyActivityIDid(int activityID);
     }
 }

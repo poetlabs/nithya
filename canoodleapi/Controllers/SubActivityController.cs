@@ -1,15 +1,22 @@
 ﻿using canoodleapi.DataObjects;
 using canoodleapi.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Enum = System.Enum;
 
-[ApiController]
-[Route("api/[controller]")]
+[Produces("application/json")]
+[Route("api/SubActivity")]
 public class SubActivityController : ControllerBase
 {
+    ApiResponseModel apiResponse;
+    ResultResponseModel resultResponse;
+    string _jsonData = string.Empty;
     private readonly ISubActivityRepository _subActivityRepository;
 
     public SubActivityController(ISubActivityRepository subActivityRepository)
-    {
+    {   ApiResponseModel apiResponse;
+        ResultResponseModel resultResponse;
+        string _jsonData = string.Empty;
         _subActivityRepository = subActivityRepository;
     }
 
@@ -47,5 +54,45 @@ public class SubActivityController : ControllerBase
     {
         await _subActivityRepository.DeleteSubActivityAsync(id);
         return NoContent();
+    }
+
+    [HttpGet]
+    [Route("GetSubActivitybyActivityIDid/{activityID}")]
+    public ApiResponseModel GetSubActivitybyActivityIDid(int activityID)
+    {
+        List<SubActivities> lstsubactivities = new List<SubActivities>();
+        try
+        {
+            lstsubactivities = _subActivityRepository.GetSubActivitybyActivityIDid(activityID);
+            _jsonData = string.Empty;
+            if (lstsubactivities != null)
+            {
+                resultResponse.Data = lstsubactivities;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(lstsubactivities);
+
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+
     }
 }
