@@ -29,7 +29,7 @@ namespace canoodleapi.Repository
                 else
                 {    
                     maintenanceActivity.updateddate = DateTime.UtcNow;
-                    maintenanceActivity.SpecificTime = "12:01:00.0000000";
+                   // maintenanceActivity.SpecificTime = "12:01:00.0000000";
                     maintenanceActivity.ActivityId = (int)SqlMapperExtensions.Insert(con, maintenanceActivity);
 
                     if (maintenanceActivity.IsSubActivityAvilable == 1)
