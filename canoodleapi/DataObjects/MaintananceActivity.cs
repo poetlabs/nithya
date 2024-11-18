@@ -24,6 +24,8 @@ namespace canoodleapi.DataObjects
         public int IsSubActivityAvilable { get; set; }
         [Write(false)]
         public List<SubActivities> SubActivitieslist { get; set; }
+        [Write(false)]
+        public int CompletedStatusID { get; set; }
 
     }
 }
