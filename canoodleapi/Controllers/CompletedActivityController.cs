@@ -28,14 +28,14 @@ public class CompletedActivityController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCompletedActivity([FromBody] CompletedActivity completedActivity)
+    public async Task<IActionResult> CreateCompletedActivity([FromBody] CompletedActivities completedActivity)
     {
         await _completedActivityRepository.CreateCompletedActivityAsync(completedActivity);
         return CreatedAtAction(nameof(GetCompletedActivityById), new { id = completedActivity.CompletionId }, completedActivity);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCompletedActivity(int id, [FromBody] CompletedActivity completedActivity)
+    public async Task<IActionResult> UpdateCompletedActivity(int id, [FromBody] CompletedActivities completedActivity)
     {
         if (id != completedActivity.CompletionId) return BadRequest();
         await _completedActivityRepository.UpdateCompletedActivityAsync(completedActivity);

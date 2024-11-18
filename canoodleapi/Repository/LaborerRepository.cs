@@ -65,5 +65,31 @@ namespace canoodleapi.Repository
 
 
         }
+        private LaborerLogin SaveLaborerLogin(LaborerLogin laborerLogin)
+        {
+            try
+            {
+                if (laborerLogin.Laborerloginid > 0)
+                {
+                    laborerLogin.Updateddate = DateTime.UtcNow;
+                    SqlMapperExtensions.Update(con, laborerLogin);
+                }
+                else
+                {
+
+                    laborerLogin.Updateddate = DateTime.UtcNow;
+                    laborerLogin.Laborerloginid = (int)SqlMapperExtensions.Insert(con, laborerLogin);
+
+                }
+                return laborerLogin;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
     }
 }

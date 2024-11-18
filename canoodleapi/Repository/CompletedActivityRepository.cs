@@ -18,21 +18,21 @@ namespace canoodleapi.Repository
 
        // public CompletedActivityRepository(DapperContext context) => _context = context;
 
-        public async Task<IEnumerable<CompletedActivity>> GetAllCompletedActivitiesAsync()
+        public async Task<IEnumerable<CompletedActivities>> GetAllCompletedActivitiesAsync()
         {
             const string query = "SELECT * FROM CompletedActivities";
             using var connection = _context.CreateConnection();
-            return await connection.QueryAsync<CompletedActivity>(query);
+            return await connection.QueryAsync<CompletedActivities>(query);
         }
 
-        public async Task<CompletedActivity> GetCompletedActivityByIdAsync(int completionId)
+        public async Task<CompletedActivities> GetCompletedActivityByIdAsync(int completionId)
         {
             const string query = "SELECT * FROM CompletedActivities WHERE CompletionId = @CompletionId";
             using var connection = _context.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<CompletedActivity>(query, new { CompletionId = completionId });
+            return await connection.QuerySingleOrDefaultAsync<CompletedActivities>(query, new { CompletionId = completionId });
         }
 
-        public async Task CreateCompletedActivityAsync(CompletedActivity completedActivity)
+        public async Task CreateCompletedActivityAsync(CompletedActivities completedActivity)
         {
             const string query = @"INSERT INTO CompletedActivities (CompletionId, VisitId, ActivityId, SubActivityId, Value, Alert) 
                                VALUES (@CompletionId, @VisitId, @ActivityId, @SubActivityId, @Value, @Alert)";
@@ -40,7 +40,7 @@ namespace canoodleapi.Repository
             await connection.ExecuteAsync(query, completedActivity);
         }
 
-        public async Task UpdateCompletedActivityAsync(CompletedActivity completedActivity)
+        public async Task UpdateCompletedActivityAsync(CompletedActivities completedActivity)
         {
             const string query = @"UPDATE CompletedActivities SET VisitId = @VisitId, ActivityId = @ActivityId, 
                                SubActivityId = @SubActivityId, Value = @Value, Alert = @Alert WHERE CompletionId = @CompletionId";
