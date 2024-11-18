@@ -54,6 +54,31 @@ namespace canoodleapi.Repository
             using var connection = _context.CreateConnection();
             await connection.ExecuteAsync(query, new { CompletionId = completionId });
         }
-        
+
+        public CompletedActivities SaveCompletedActivity(CompletedActivities completedActivities)
+        {
+            try
+            {
+                if (completedActivities.CompletionId > 0)
+                {
+                    completedActivities.updateddate = DateTime.UtcNow;
+                    SqlMapperExtensions.Update(con, completedActivities);
+                }
+                else
+                {
+                    completedActivities.mcStatusID =Convert.ToInt32(CompletedActivitiesStatus.Active);
+                    completedActivities.updateddate = DateTime.UtcNow;
+                    completedActivities.CompletionId = (int)SqlMapperExtensions.Insert(con, completedActivities);
+
+                    
+                }
+                return completedActivities;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

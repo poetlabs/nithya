@@ -13,4 +13,11 @@
         Active=1,
         InActive=2
     }
+    public enum CompletedActivitiesStatus
+    {
+        Active = 9,
+        Inprogress = 10,
+        InActive = 11,
+        Completed = 12,
+    }
 }

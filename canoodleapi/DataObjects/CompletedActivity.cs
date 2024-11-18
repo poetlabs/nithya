@@ -12,6 +12,7 @@ namespace canoodleapi.DataObjects
         public string SubActivityId { get; set; }
         public string readingvalue { get; set; }
         public string commemnts { get; set; }
+        public int mcStatusID { get; set; }
         public DateTime updateddate { get; set; }
     }
 }
