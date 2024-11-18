@@ -78,6 +78,23 @@ namespace canoodleapi.Repository
 
 
         }
+        public List<SubActivities> Getallsubactivitybyid(int activityid)
+        {
+            try
+            {
+                List<SubActivities> lstactivitysub = new List<SubActivities>();
+                string sql = "select * from SubActivities where activityId =@activityid";
+                lstactivitysub = con.Query<SubActivities>(sql, new { activityid = activityid }).ToList();
+
+                return lstactivitysub;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }
 
         public List<MaintenanceActivities> GetAllMaintanceactivityForHomescrren()
         {
@@ -105,22 +122,6 @@ namespace canoodleapi.Repository
 
 
         }
-        public List<SubActivities> GetSubActivitybyActivityid(int activityID)
-        {
-            try
-            {
-                List<SubActivities> lstmcommon = new List<SubActivities>();
-                string sql = "select * from SubActivities where activityId =@activityID";
-                lstmcommon = con.Query<SubActivities>(sql, new { activityID = activityID }).ToList();
-
-                return lstmcommon;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-
-        }
+        
     }
 }

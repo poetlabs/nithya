@@ -101,6 +101,45 @@ public class MaintenanceActivityController : ControllerBase
 
     }
     [HttpGet]
+    [Route("Getallsubactivitybyid/{activityid}")]
+    public ApiResponseModel Getallsubactivitybyid(int activityid)
+    {
+        List<SubActivities> lstsub = new List<SubActivities>();
+        try
+        {
+            lstsub = _activityRepository.Getallsubactivitybyid(activityid);
+            _jsonData = string.Empty;
+            if (lstsub != null)
+            {
+                resultResponse.Data = lstsub;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(lstsub);
+
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+
+    }
+    [HttpGet]
     [Route("GetAllMaintanceactivityForHomescrren")]
     public ApiResponseModel GetAllMaintanceactivityForHomescrren()
     {
@@ -139,44 +178,6 @@ public class MaintenanceActivityController : ControllerBase
         return apiResponse;
 
     }
-    [HttpGet]
-    [Route("GetSubActivitybyActivityid/{activityID}")]
-    public ApiResponseModel GetSubActivitybyActivityid(int activityID)
-    {
-        List<SubActivities> lstsubactivities = new List<SubActivities>();
-        try
-        {
-            lstsubactivities = _activityRepository.GetSubActivitybyActivityid(activityID);
-            _jsonData = string.Empty;
-            if (lstsubactivities.Count > 0)
-            {
-                resultResponse.Data = lstsubactivities;
-                resultResponse.IsError = false;
-                _jsonData = JsonConvert.SerializeObject(lstsubactivities);
-
-            }
-            else
-            {
-                resultResponse.Data = null;
-                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
-                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
-
-            }
-
-        }
-
-        catch (Exception ex)
-        {
-            resultResponse.IsError = true;
-            resultResponse.Message = ex.Message;
-            resultResponse.StackTrace = ex.StackTrace;
-            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
-
-        }
-        apiResponse.Result = resultResponse;
-        _jsonData = JsonConvert.SerializeObject(apiResponse);
-        return apiResponse;
-
-    }
+    
 
 }
