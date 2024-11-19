@@ -11,5 +11,6 @@ namespace canoodleapi.DataObjects
         public string Name { get; set; }
         public string Location { get; set; }
         public DateTime Updateddate { get; set; }
+        public int mcstatusID { get; set; }
     }
 }

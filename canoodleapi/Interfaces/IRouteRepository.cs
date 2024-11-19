@@ -6,6 +6,7 @@ namespace canoodleapi.Interfaces
     {        
         Routes SaveRoutes(Routes routes);
         List<Routes> GetAllRoutes();
+        bool DeleteRoutes(int routeId);
 
 
     }

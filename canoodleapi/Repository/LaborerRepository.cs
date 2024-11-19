@@ -45,18 +45,15 @@ namespace canoodleapi.Repository
             }
 
         }
-        public bool GetlaborerbyUsername(string username, int qpin)
+        private Laborers GetlaborerbyUsername(string username, int qpin)
         {
             try
             {
-                bool isuserexist = false;
+                
                 string sql = "select * from Laborers where username = @username and qpin = @qpin and mcjourneystatusid =@mcjourneystatusid";
                 Laborers lbr = con.Query<Laborers>(sql, new { username = username, qpin= qpin, mcjourneystatusid=Convert.ToInt32(Status.Active) }).FirstOrDefault();
-                if (lbr!=null)
-                {
-                    isuserexist = true;
-                }
-                return isuserexist;
+               
+                return lbr;
             }
             catch (Exception ex)
             {
@@ -65,30 +62,37 @@ namespace canoodleapi.Repository
 
 
         }
-        private LaborerLogin SaveLaborerLogin(LaborerLogin laborerLogin)
+        public LaborerLogin UserLogin(UserloginInput userlogin)
         {
             try
             {
-                if (laborerLogin.Laborerloginid > 0)
-                {
-                    laborerLogin.Updateddate = DateTime.UtcNow;
-                    SqlMapperExtensions.Update(con, laborerLogin);
-                }
-                else
-                {
+                LaborerLogin laborerLogin = new LaborerLogin();
+                Laborers userexist = GetlaborerbyUsername(userlogin.username, userlogin.qpin);
 
+                if (userexist!=null)
+                {                   
+                    laborerLogin.Laborerid = userexist.LaborerId;
+                    laborerLogin.Systemid = userlogin.systemid;
+                    laborerLogin.Logindate = DateTime.Now;
                     laborerLogin.Updateddate = DateTime.UtcNow;
+                    laborerLogin.Loginqrid = 1;
                     laborerLogin.Laborerloginid = (int)SqlMapperExtensions.Insert(con, laborerLogin);
-
                 }
+                
+
                 return laborerLogin;
 
-
             }
+
             catch (Exception ex)
             {
                 throw ex;
             }
+
+            
+
+
+           
 
         }
     }

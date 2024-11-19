@@ -3,6 +3,7 @@ using canoodleapi.Interfaces;
 using Dapper;
 using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Options;
+using System.Data;
 
 namespace canoodleapi.Repository
 {
@@ -26,6 +27,7 @@ namespace canoodleapi.Repository
                 }
                 else
                 {
+                    machines.mcstatusID = (int)Status.Active;
                     machines.Updateddate = DateTime.UtcNow;
                     machines.MachineId = (int)SqlMapperExtensions.Insert(con, machines);
 
@@ -44,8 +46,9 @@ namespace canoodleapi.Repository
             List<Machines> lstmachines = new List<Machines>();
             try
             {
-                string sql = "SELECT * FROM Machines";
-                lstmachines = con.Query<Machines>(sql).AsList();
+                string sql = "SELECT * FROM Machines where mcstatusID=@mcstatusID";
+                lstmachines = con.Query<Machines>(sql, new { mcstatusID=Status.Active}).AsList();
+
                 return lstmachines;
             }
             catch (Exception ex)
@@ -54,6 +57,30 @@ namespace canoodleapi.Repository
             }
             return lstmachines;
 
+        }
+        public bool DeleteMechine(int machineId)
+        {
+
+
+            bool isupadte = false;
+
+            try
+            {
+
+                string sql = "update Machines set mcstatusID=@mcstatusID where machineId=@machineId";
+                int rows = con.Execute(sql, new { machineId = machineId, mcstatusID=Status.InActive });
+                if (rows > 0)
+                {
+                    isupadte = true;
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+            return isupadte;
         }
 
     }

@@ -5,6 +5,6 @@ namespace canoodleapi.Interfaces
     public interface ILaborerRepository
     {
         Laborers SaveLaborers(Laborers laborer);
-        bool GetlaborerbyUsername(string username, int qpin);
+        LaborerLogin UserLogin(UserloginInput userlogin);
     }
 }

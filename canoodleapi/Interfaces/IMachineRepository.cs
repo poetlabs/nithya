@@ -7,5 +7,6 @@ namespace canoodleapi.Interfaces
         
         Machines SaveMachines(Machines machines);
         List<Machines> GetAllMachines();
+        bool DeleteMechine(int machineId);
     }
 }

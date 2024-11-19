@@ -64,44 +64,86 @@ public class LaborerController : ControllerBase
         _jsonData = JsonConvert.SerializeObject(apiResponse);
          return apiResponse;
     }
-    [HttpGet]
-    [Route("GetlaborerbyUsername/{usernmae}/{qpin}")]
-    public ApiResponseModel GetlaborerbyUsername(string usernmae,int qpin)
+    //[HttpGet]
+    //[Route("GetlaborerbyUsername/{usernmae}/{qpin}")]
+    //public ApiResponseModel GetlaborerbyUsername(string usernmae,int qpin)
+    //{
+    //    bool isuserexist = false;
+    //    try
+    //    {
+    //        isuserexist = _laborerRepository.GetlaborerbyUsername(usernmae, qpin);
+    //        _jsonData = string.Empty;
+    //        if (isuserexist != null)
+    //        {
+    //            resultResponse.Data = isuserexist;
+    //            resultResponse.IsError = false;
+    //            _jsonData = JsonConvert.SerializeObject(isuserexist);
+                
+    //        }
+    //        else
+    //        {
+    //            resultResponse.Data = null;
+    //            resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+    //            _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+               
+    //        }
+
+    //    }
+
+    //    catch (Exception ex)
+    //    {
+    //        resultResponse.IsError = true;
+    //        resultResponse.Message = ex.Message;
+    //        resultResponse.StackTrace = ex.StackTrace;           
+    //        _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+    //    }
+    //    apiResponse.Result = resultResponse;
+    //    _jsonData = JsonConvert.SerializeObject(apiResponse);
+    //      return apiResponse;
+
+    //}
+    [HttpPost]
+    [Route("UserLogin")]
+    public ApiResponseModel UserLogin([FromBody] UserloginInput userlogin)
     {
-        bool isuserexist = false;
         try
         {
-            isuserexist = _laborerRepository.GetlaborerbyUsername(usernmae, qpin);
-            _jsonData = string.Empty;
-            if (isuserexist != null)
+            if (userlogin != null)
             {
-                resultResponse.Data = isuserexist;
-                resultResponse.IsError = false;
-                _jsonData = JsonConvert.SerializeObject(isuserexist);
-                
+                LaborerLogin laborerslogin = new LaborerLogin();
+                _jsonData = JsonConvert.SerializeObject(userlogin);
+
+                laborerslogin = _laborerRepository.UserLogin(userlogin);
+                _jsonData = string.Empty;
+                if (laborerslogin != null)
+                {
+                    resultResponse.Data = laborerslogin;
+                    resultResponse.IsError = false;
+                    _jsonData = JsonConvert.SerializeObject(laborerslogin);
+
+                }
             }
             else
             {
                 resultResponse.Data = null;
-                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoDataReceived);
                 _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
-               
+
+
             }
-
         }
-
         catch (Exception ex)
         {
+
             resultResponse.IsError = true;
             resultResponse.Message = ex.Message;
-            resultResponse.StackTrace = ex.StackTrace;           
+            resultResponse.StackTrace = ex.StackTrace;
             _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
-
         }
         apiResponse.Result = resultResponse;
         _jsonData = JsonConvert.SerializeObject(apiResponse);
-          return apiResponse;
-
+        return apiResponse;
     }
 
 }

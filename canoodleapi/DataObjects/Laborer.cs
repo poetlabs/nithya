@@ -15,4 +15,12 @@ namespace canoodleapi.DataObjects
         public DateTime StartedAt { get; set; }
         public DateTime updateddate { get; set; }
     }
+
+    public class UserloginInput
+    {
+        public string username { get; set; }
+        public int qpin { get; set; }
+        public string systemid { get; set; }
+        public int loginid { get; set; }
+    }
 }

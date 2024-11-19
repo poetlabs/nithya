@@ -29,6 +29,7 @@
                 }
                 else
                 {
+                    routes.mcstatusID = (int)Status.Active;
                     routes.Updateddate = DateTime.UtcNow;
                     int id = (int)SqlMapperExtensions.Insert(con, routes);
                  
@@ -47,8 +48,8 @@
             List<Routes> lstmachines = new List<Routes>();
             try
             {
-                string sql = "SELECT * FROM Routes";
-                lstmachines = con.Query<Routes>(sql).AsList();
+                string sql = "SELECT * FROM Routes where mcstatusID=@mcstatusID ";
+                lstmachines = con.Query<Routes>(sql,new { mcstatusID=Status.Active }).AsList();
                 return lstmachines;
             }
             catch (Exception ex)
@@ -57,6 +58,30 @@
             }
             return lstmachines;
 
+        }
+        public bool DeleteRoutes(int routeId)
+        {
+
+
+            bool isupadte = false;
+
+            try
+            {
+
+                string sql = "update Routes set mcstatusID=@mcstatusID where routeId=@routeId";
+                int rows = con.Execute(sql, new { routeId = routeId, mcstatusID = Status.InActive });
+                if (rows > 0)
+                {
+                    isupadte = true;
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+            return isupadte;
         }
     }
 
