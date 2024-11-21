@@ -79,5 +79,31 @@ namespace canoodleapi.Repository
             }
         }
 
+
+        private LaborerVisit SaveLaborVisit(LaborerVisit laborVisit)
+        {
+            try
+            {
+                if(laborVisit.VisitId > 0)
+                {
+                    laborVisit.updateddate = DateTime.UtcNow;
+                    SqlMapperExtensions.Update(con,laborVisit);
+                }
+                else
+                {
+                    laborVisit.updateddate = DateTime.UtcNow;
+                    laborVisit.VisitStart = DateTime.UtcNow;
+                    laborVisit.VisitId = (int)SqlMapperExtensions.Insert(con, laborVisit);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return laborVisit;
+        }
+
     }
 }

@@ -20,6 +20,9 @@ namespace canoodleapi.DataObjects
         public DateTime? SpecificTime { get; set; }
         public DateTime updateddate { get; set; }
         public int? mcintervalid { get; set; }
+        public int? IsPriority { get; set; }
+        public string EstimatedTime { get; set; }
+
         [Write(false)]
         public int IsSubActivityAvilable { get; set; }
         [Write(false)]
