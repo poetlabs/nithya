@@ -12,5 +12,7 @@ namespace canoodleapi.DataObjects
         public string Systemid { get; set; }
         public DateTime Logindate { get; set; }
         public DateTime Updateddate { get; set; }
+        [Write(false)]
+        public string Laborername { get; set; }
     }
 }

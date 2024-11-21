@@ -77,6 +77,7 @@ namespace canoodleapi.Repository
                     laborerLogin.Updateddate = DateTime.UtcNow;
                     laborerLogin.Loginqrid = 1;
                     laborerLogin.Laborerloginid = (int)SqlMapperExtensions.Insert(con, laborerLogin);
+                    laborerLogin.Laborername = userexist.fullname;
                 }
                 
 

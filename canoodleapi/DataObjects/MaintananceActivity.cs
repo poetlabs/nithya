@@ -9,7 +9,7 @@ namespace canoodleapi.DataObjects
         public int ActivityId { get; set; }
         public int MachineId { get; set; }
         public string Descriptions { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime? DueDate { get; set; }
         public int mcstatusesid { get; set; }
         public DateTime? lastCompleted { get; set; }
         public int mcactivityTypeId { get; set; }
