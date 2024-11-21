@@ -22,6 +22,7 @@ namespace canoodleapi.DataObjects
         public int? mcintervalid { get; set; }
         public int? IsPriority { get; set; }
         public string EstimatedTime { get; set; }
+        public int? RouteID { get; set; }
 
         [Write(false)]
         public int IsSubActivityAvilable { get; set; }

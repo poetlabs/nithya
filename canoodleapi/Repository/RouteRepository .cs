@@ -83,6 +83,22 @@
 
             return isupadte;
         }
+        public List<Shift> GetAllShift()
+        {
+            List<Shift> lstshift = new List<Shift>();
+            try
+            {
+                string sql = "SELECT * FROM Shift";
+                lstshift = con.Query<Shift>(sql).AsList();
+                return lstshift;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return lstshift;
+
+        }
     }
 
 }

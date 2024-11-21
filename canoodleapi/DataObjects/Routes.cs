@@ -10,6 +10,7 @@ namespace canoodleapi.DataObjects
         public string RouteName { get; set; }
         public DateTime Updateddate { get; set; }
         public int mcstatusID { get; set; }
+        public int ShiftID { get; set; }
 
     }
 }
