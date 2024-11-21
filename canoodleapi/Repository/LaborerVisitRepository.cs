@@ -10,21 +10,21 @@ namespace canoodleapi.Repository
 
         public LaborerVisitRepository(DapperContext context) => _context = context;
 
-        public async Task<IEnumerable<LaborerVisit>> GetAllVisitsAsync()
+        public async Task<IEnumerable<LaborerVisits>> GetAllVisitsAsync()
         {
             const string query = "SELECT * FROM LaborerVisits";
             using var connection = _context.CreateConnection();
-            return await connection.QueryAsync<LaborerVisit>(query);
+            return await connection.QueryAsync<LaborerVisits>(query);
         }
 
-        public async Task<LaborerVisit> GetVisitByIdAsync(int visitId)
+        public async Task<LaborerVisits> GetVisitByIdAsync(int visitId)
         {
             const string query = "SELECT * FROM LaborerVisits WHERE VisitId = @VisitId";
             using var connection = _context.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<LaborerVisit>(query, new { VisitId = visitId });
+            return await connection.QuerySingleOrDefaultAsync<LaborerVisits>(query, new { VisitId = visitId });
         }
 
-        public async Task CreateVisitAsync(LaborerVisit visit)
+        public async Task CreateVisitAsync(LaborerVisits visit)
         {
             const string query = @"INSERT INTO LaborerVisits (VisitId, LaborerId, MachineId, VisitStart) 
                                VALUES (@VisitId, @LaborerId, @MachineId, @VisitStart)";
@@ -32,7 +32,7 @@ namespace canoodleapi.Repository
             await connection.ExecuteAsync(query, visit);
         }
 
-        public async Task UpdateVisitAsync(LaborerVisit visit)
+        public async Task UpdateVisitAsync(LaborerVisits visit)
         {
             const string query = @"UPDATE LaborerVisits SET LaborerId = @LaborerId, MachineId = @MachineId, 
                                VisitStart = @VisitStart WHERE VisitId = @VisitId";

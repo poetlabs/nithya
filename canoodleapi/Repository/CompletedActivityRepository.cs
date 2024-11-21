@@ -3,6 +3,7 @@ using canoodleapi.Interfaces;
 using Dapper;
 using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 
 namespace canoodleapi.Repository
 {
@@ -80,11 +81,12 @@ namespace canoodleapi.Repository
         }
 
 
-        private LaborerVisit SaveLaborVisit(LaborerVisit laborVisit)
+        public LaborerVisits SaveLaborVisit(LaborerVisits laborVisit)
         {
             try
             {
-                if(laborVisit.VisitId > 0)
+                CompletedActivities completedActivities = new CompletedActivities();
+                if (laborVisit.VisitId > 0)
                 {
                     laborVisit.updateddate = DateTime.UtcNow;
                     SqlMapperExtensions.Update(con,laborVisit);
@@ -95,7 +97,15 @@ namespace canoodleapi.Repository
                     laborVisit.VisitStart = DateTime.UtcNow;
                     laborVisit.VisitId = (int)SqlMapperExtensions.Insert(con, laborVisit);
 
+                    completedActivities.VisitId = laborVisit.VisitId;
+                    completedActivities.ActivityId = laborVisit.ActivityID;
+                    completedActivities.mcStatusID = (int)CompletedActivitiesStatus.Active;
+
+                    SaveCompletedActivitesOnActivstatus(completedActivities);
+
                 }
+
+                
 
             }
             catch (Exception ex)
@@ -103,6 +113,89 @@ namespace canoodleapi.Repository
                 throw ex;
             }
             return laborVisit;
+        }
+
+        private bool SaveCompletedActivitesOnActivstatus(CompletedActivities completedActivities)
+        {
+            try
+            {
+
+                if (completedActivities.CompletionId > 0)
+                {
+                    completedActivities.updateddate = DateTime.UtcNow;
+                    SqlMapperExtensions.Update(con, completedActivities);
+                }
+                else
+                {
+                    completedActivities.updateddate = DateTime.UtcNow;
+                    completedActivities.CompletionId = (int)SqlMapperExtensions.Insert(con, completedActivities);
+
+                    List<SubActivities> lstsubactivity = GetAllSubActivities(completedActivities.ActivityId);
+                    if (lstsubactivity.Count > 0)
+                    {
+                        List<CompletedSubActivity> lstcomsub = new List<CompletedSubActivity>();
+                        lstsubactivity.ForEach(delegate (SubActivities subActivities)
+
+                        {
+                            CompletedSubActivity completedsubAct = new CompletedSubActivity();
+                            completedsubAct.CompletionId = completedActivities.CompletionId;
+                            completedsubAct.SubActivityID = subActivities.SubActivityId;
+                            completedsubAct.McStatusID = (int)CompletedActivitiesStatus.Active;
+                            lstcomsub.Add(completedsubAct);
+                        });
+                        SaveCompletedSubActivitessOnActivstatus(lstcomsub);
+                    }
+                }
+
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            return true;
+        }
+        private bool SaveCompletedSubActivitessOnActivstatus(List<CompletedSubActivity> completedSubActivitieslst)
+        {
+            try
+            {
+                completedSubActivitieslst.ForEach(delegate (CompletedSubActivity completedSubActivity)
+                {
+                    if (completedSubActivity.CompletedSubActivityID > 0)
+
+                    {
+                        completedSubActivity.UpdatedDate = DateTime.UtcNow;
+                        SqlMapperExtensions.Update(con, completedSubActivity);
+                    }
+                    else
+                    {
+
+                        completedSubActivity.UpdatedDate = DateTime.UtcNow;
+                        completedSubActivity.CompletedSubActivityID = (int)SqlMapperExtensions.Insert(con, completedSubActivity);
+
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return true;
+        }
+
+        private List<SubActivities>GetAllSubActivities(int activityid)
+        {
+            List<SubActivities>lstsubActivities = new List<SubActivities>();
+            try
+            {
+                
+                string sql = "select * from SubActivities where activityId =@activityid and mcstatusesid=@mcstatusesid";
+                lstsubActivities = con.Query<SubActivities>(sql, new { activityid = activityid, mcstatusesid=Status.Active }).ToList();
+            }
+            catch(Exception ex)
+            { throw ex; }
+            return lstsubActivities;
+
+
         }
 
     }

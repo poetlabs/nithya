@@ -8,7 +8,7 @@ namespace canoodleapi.DataObjects
         [Key]
         public int CompletionId { get; set; }
         public int VisitId { get; set; }
-        public string ActivityId { get; set; }
+        public int ActivityId { get; set; }
         public string SubActivityId { get; set; }
         public string readingvalue { get; set; }
         public string commemnts { get; set; }

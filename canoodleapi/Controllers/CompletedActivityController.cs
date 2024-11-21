@@ -96,4 +96,44 @@ public class CompletedActivityController : ControllerBase
         _jsonData = JsonConvert.SerializeObject(apiResponse);
         return apiResponse;
     }
+    [HttpPost]
+    [Route("SaveLaborVisit")]
+    public ApiResponseModel SaveLaborVisit([FromBody] LaborerVisits laborVisit)
+    {
+        try
+        {
+            if (laborVisit != null)
+            {
+                _jsonData = JsonConvert.SerializeObject(laborVisit);
+                laborVisit = _completedActivityRepository.SaveLaborVisit(laborVisit);
+                _jsonData = string.Empty;
+                if (laborVisit != null)
+                {
+                    resultResponse.Data = laborVisit;
+                    resultResponse.IsError = false;
+                    _jsonData = JsonConvert.SerializeObject(laborVisit);
+
+                }
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoDataReceived);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+
+            }
+        }
+        catch (Exception ex)
+        {
+
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+    }
 }

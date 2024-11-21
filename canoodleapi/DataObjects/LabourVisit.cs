@@ -2,8 +2,8 @@
 
 namespace canoodleapi.DataObjects
 {
-    [Table("LaborerVisit")]
-    public class LaborerVisit
+    [Table("LaborerVisits")]
+    public class LaborerVisits
     {
         [Key]
         public int VisitId { get; set; }
@@ -11,5 +11,7 @@ namespace canoodleapi.DataObjects
         public int machineId { get; set; }
         public DateTime VisitStart { get; set; }
         public DateTime updateddate { get; set; }
+        [Write(false)]
+        public int ActivityID { get; set; }
     }
 }

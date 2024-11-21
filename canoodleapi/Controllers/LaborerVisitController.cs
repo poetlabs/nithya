@@ -28,14 +28,14 @@ public class LaborerVisitController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateLaborerVisit([FromBody] LaborerVisit visit)
+    public async Task<IActionResult> CreateLaborerVisit([FromBody] LaborerVisits visit)
     {
         await _visitRepository.CreateVisitAsync(visit);
         return CreatedAtAction(nameof(GetLaborerVisitById), new { id = visit.VisitId }, visit);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateLaborerVisit(int id, [FromBody] LaborerVisit visit)
+    public async Task<IActionResult> UpdateLaborerVisit(int id, [FromBody] LaborerVisits visit)
     {
         if (id != visit.VisitId) return BadRequest();
         await _visitRepository.UpdateVisitAsync(visit);
