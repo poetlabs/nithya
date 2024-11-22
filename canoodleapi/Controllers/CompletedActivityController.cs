@@ -136,4 +136,44 @@ public class CompletedActivityController : ControllerBase
         _jsonData = JsonConvert.SerializeObject(apiResponse);
         return apiResponse;
     }
+    [HttpPost]
+    [Route("SaveCompletedSubActivity")]
+    public ApiResponseModel SaveCompletedSubActivity([FromBody] CompletedSubActivity completedSubActivity)
+    {
+        try
+        {
+            if (completedSubActivity != null)
+            {
+                _jsonData = JsonConvert.SerializeObject(completedSubActivity);
+                completedSubActivity = _completedActivityRepository.SaveCompletedSubActivity(completedSubActivity);
+                _jsonData = string.Empty;
+                if (completedSubActivity != null)
+                {
+                    resultResponse.Data = completedSubActivity;
+                    resultResponse.IsError = false;
+                    _jsonData = JsonConvert.SerializeObject(completedSubActivity);
+
+                }
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoDataReceived);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+
+            }
+        }
+        catch (Exception ex)
+        {
+
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+    }
 }

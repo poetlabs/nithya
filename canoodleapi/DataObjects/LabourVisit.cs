@@ -11,6 +11,7 @@ namespace canoodleapi.DataObjects
         public int machineId { get; set; }
         public DateTime VisitStart { get; set; }
         public DateTime updateddate { get; set; }
+        public int mcStatusID { get; set; }
         [Write(false)]
         public int ActivityID { get; set; }
     }

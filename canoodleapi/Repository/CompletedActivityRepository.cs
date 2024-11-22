@@ -197,6 +197,30 @@ namespace canoodleapi.Repository
 
 
         }
+        public CompletedSubActivity SaveCompletedSubActivity(CompletedSubActivity completedSubActivity)
+        {
+            try
+            {
+                if (completedSubActivity.CompletedSubActivityID > 0)
+                {
+                    completedSubActivity.UpdatedDate = DateTime.UtcNow;
+                    SqlMapperExtensions.Update(con, completedSubActivity);
+                }
+                else
+                {
+                    completedSubActivity.McStatusID =(int)CompletedActivitiesStatus.Inprogress;
+                    completedSubActivity.UpdatedDate = DateTime.UtcNow;
+                    completedSubActivity.CompletionId = (int)SqlMapperExtensions.Insert(con, completedSubActivity);
+
+
+                }
+                return completedSubActivity;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
     }
 }

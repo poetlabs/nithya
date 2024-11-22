@@ -20,4 +20,10 @@
         InActive = 11,
         Completed = 12,
     }
+    public enum LaborerVisitsStatus
+    {
+        Active = 14,
+        InActive = 15,
+        VisitCompleted = 16,
+    }
 }
