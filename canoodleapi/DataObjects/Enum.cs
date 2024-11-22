@@ -16,7 +16,7 @@
     public enum CompletedActivitiesStatus
     {
         Active = 9,
-        Inprogress = 10,
+        Submitted = 10,
         InActive = 11,
         Completed = 12,
     }

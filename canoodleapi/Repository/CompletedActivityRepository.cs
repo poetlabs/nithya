@@ -204,7 +204,7 @@ namespace canoodleapi.Repository
             {
                 if (completedSubActivity.CompletedSubActivityID > 0)
                 {
-                    completedSubActivity.McStatusID = (int)CompletedActivitiesStatus.Inprogress;
+                    completedSubActivity.McStatusID = (int)CompletedActivitiesStatus.Submitted;
                     completedSubActivity.UpdatedDate = DateTime.UtcNow;
                     SqlMapperExtensions.Update(con, completedSubActivity);
                 }
