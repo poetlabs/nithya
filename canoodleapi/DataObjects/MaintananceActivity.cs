@@ -30,6 +30,10 @@ namespace canoodleapi.DataObjects
         public List<SubActivities> SubActivitieslist { get; set; }
         [Write(false)]
         public int CompletedStatusID { get; set; }
-
+        [Write(false)]
+        public int CompletionId { get; set; }
+        [Write(false)]
+        public string MachineName { get; set; }
+        
     }
 }

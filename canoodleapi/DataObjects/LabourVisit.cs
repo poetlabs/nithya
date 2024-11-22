@@ -14,5 +14,7 @@ namespace canoodleapi.DataObjects
         public int mcStatusID { get; set; }
         [Write(false)]
         public int ActivityID { get; set; }
+        [Write(false)]
+        public int completionId { get; set; }
     }
 }

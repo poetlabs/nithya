@@ -15,5 +15,9 @@ namespace canoodleapi.DataObjects
         public int Min { get; set; }
         public int Max { get; set; }
         public DateTime Updateddate { get; set; }
+        [Write(false)]
+        public int CompletedSubActivityID { get; set; }
+
+        
     }
 }

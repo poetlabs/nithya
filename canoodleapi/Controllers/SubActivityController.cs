@@ -58,13 +58,13 @@ public class SubActivityController : ControllerBase
     }
 
     [HttpGet]
-    [Route("GetSubActivitybyActivityid/{activityID}")]
-    public ApiResponseModel GetSubActivitybyActivityid(int activityID)
+    [Route("GetSubActivitybyActivityid/{activityID}/{CompletionId}")]
+    public ApiResponseModel GetSubActivitybyActivityid(int activityID, int CompletionId)
     {
         List<SubActivities> lstsubactivities = new List<SubActivities>();
         try
         {
-            lstsubactivities = _subActivityRepository.GetSubActivitybyActivityid(activityID);
+            lstsubactivities = _subActivityRepository.GetSubActivitybyActivityid(activityID, CompletionId);
             _jsonData = string.Empty;
             if (lstsubactivities.Count>0)
             {

@@ -52,13 +52,13 @@ namespace canoodleapi.Repository
             using var connection = _context.CreateConnection();
             await connection.ExecuteAsync(query, new { SubActivityId = subActivityId });
         }
-        public List<SubActivities> GetSubActivitybyActivityid(int activityID)
+        public List<SubActivities> GetSubActivitybyActivityid(int activityID,int CompletionId)
         {
             try
             {
                 List<SubActivities> lstmcommon = new List<SubActivities>();
-                string sql = "select * from SubActivities where activityId =@activityID";
-                lstmcommon = con.Query<SubActivities>(sql, new { activityID = activityID }).ToList();
+                string sql = "select ca.CompletedSubActivityID as CompletedSubActivityID,sa.* from SubActivities sa inner join CompletedSubActivity ca on sa.SubActivityID=ca.SubActivityID where activityId =@activityID and ca.CompletionId=@CompletionId and McStatusID=@McStatusID";
+                lstmcommon = con.Query<SubActivities>(sql, new { activityID = activityID, CompletionId= CompletionId, McStatusID=(int)CompletedActivitiesStatus.Active }).ToList();
 
                 return lstmcommon;
             }

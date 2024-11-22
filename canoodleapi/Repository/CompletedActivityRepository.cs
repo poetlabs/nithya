@@ -95,14 +95,15 @@ namespace canoodleapi.Repository
                 {
                     laborVisit.updateddate = DateTime.UtcNow;
                     laborVisit.VisitStart = DateTime.UtcNow;
+                    laborVisit.mcStatusID = (int)LaborerVisitsStatus.Active;
                     laborVisit.VisitId = (int)SqlMapperExtensions.Insert(con, laborVisit);
 
                     completedActivities.VisitId = laborVisit.VisitId;
                     completedActivities.ActivityId = laborVisit.ActivityID;
                     completedActivities.mcStatusID = (int)CompletedActivitiesStatus.Active;
 
-                    SaveCompletedActivitesOnActivstatus(completedActivities);
-
+                    int completionid= SaveCompletedActivitesOnActivstatus(completedActivities);
+                    laborVisit.completionId= completionid;
                 }
 
                 
@@ -115,7 +116,7 @@ namespace canoodleapi.Repository
             return laborVisit;
         }
 
-        private bool SaveCompletedActivitesOnActivstatus(CompletedActivities completedActivities)
+        private int SaveCompletedActivitesOnActivstatus(CompletedActivities completedActivities)
         {
             try
             {
@@ -152,7 +153,7 @@ namespace canoodleapi.Repository
             {
                 throw ex;
             }
-            return true;
+            return completedActivities.CompletionId;
         }
         private bool SaveCompletedSubActivitessOnActivstatus(List<CompletedSubActivity> completedSubActivitieslst)
         {
@@ -203,12 +204,13 @@ namespace canoodleapi.Repository
             {
                 if (completedSubActivity.CompletedSubActivityID > 0)
                 {
+                    completedSubActivity.McStatusID = (int)CompletedActivitiesStatus.Inprogress;
                     completedSubActivity.UpdatedDate = DateTime.UtcNow;
                     SqlMapperExtensions.Update(con, completedSubActivity);
                 }
                 else
                 {
-                    completedSubActivity.McStatusID =(int)CompletedActivitiesStatus.Inprogress;
+                    
                     completedSubActivity.UpdatedDate = DateTime.UtcNow;
                     completedSubActivity.CompletionId = (int)SqlMapperExtensions.Insert(con, completedSubActivity);
 
