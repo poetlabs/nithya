@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace canoodleapi.Repository
 {
-    public class MaintenanceActivityRepository : BaseRepository,IMaintenanceActivityRepository
+    public class MaintenanceActivityRepository : BaseRepository, IMaintenanceActivityRepository
     {
         private IOptions<AppSettings> _appSettings;
         public MaintenanceActivityRepository(IOptions<AppSettings> appSettings) : base(appSettings)
@@ -16,7 +16,7 @@ namespace canoodleapi.Repository
         }
         private readonly DapperContext _context;
 
-                  
+
         public MaintenanceActivities SaveMaintenanceActivity(MaintenanceActivities maintenanceActivity)
         {
             try
@@ -27,9 +27,9 @@ namespace canoodleapi.Repository
                     SqlMapperExtensions.Update(con, maintenanceActivity);
                 }
                 else
-                {    
+                {
                     maintenanceActivity.updateddate = DateTime.UtcNow;
-                   // maintenanceActivity.SpecificTime = "12:01:00.0000000";
+                    // maintenanceActivity.SpecificTime = "12:01:00.0000000";
                     maintenanceActivity.ActivityId = (int)SqlMapperExtensions.Insert(con, maintenanceActivity);
 
                     if (maintenanceActivity.IsSubActivityAvilable == 1)
@@ -49,7 +49,7 @@ namespace canoodleapi.Repository
                         });
 
                     }
-                   
+
 
 
                 }
@@ -67,8 +67,8 @@ namespace canoodleapi.Repository
             {
                 List<MasterCommon> lstmcommon = new List<MasterCommon>();
                 string sql = "select * from MasterCommon where mcommontypeid =@mcommontypeid";
-                lstmcommon = con.Query<MasterCommon>(sql, new { mcommontypeid= mcommontypeid }).ToList();
-            
+                lstmcommon = con.Query<MasterCommon>(sql, new { mcommontypeid = mcommontypeid }).ToList();
+
                 return lstmcommon;
             }
             catch (Exception ex)
@@ -111,7 +111,7 @@ namespace canoodleapi.Repository
                     " OR (mcintervalid = 4 AND SpecificDayOfWeek = @CurrentDayOfWeek) OR (mcintervalid = 5 AND SpecificDayOfMonth = @currentday ) " +
                     " OR (mcintervalid = 6 AND (DATEPART(YEAR, @CurrentDateTime) - DATEPART(YEAR, (select top 1 updateddate from CompletedActivities where activityId=ma.activityId order by 1 desc))) = 1 AND " +
                     " SpecificDayOfMonth = @currentday) ";
-                lstmcommon = con.Query<MaintenanceActivities>(sql, new { CurrentTime = CurrentTime, CurrentDayOfWeek = CurrentDayOfWeek, currentday = currentday, CurrentDateTime= CurrentDateTime }).ToList();
+                lstmcommon = con.Query<MaintenanceActivities>(sql, new { CurrentTime = CurrentTime, CurrentDayOfWeek = CurrentDayOfWeek, currentday = currentday, CurrentDateTime = CurrentDateTime }).ToList();
 
                 return lstmcommon;
             }
@@ -122,6 +122,20 @@ namespace canoodleapi.Repository
 
 
         }
-        
+        private List<MaintenanceActivities> GetAllOutstandingTask(int loginid)
+        {
+            try
+            {
+                List<MaintenanceActivities> lstmainactivites=new List<MaintenanceActivities> ();
+                return lstmainactivites;
+
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
     }
 }

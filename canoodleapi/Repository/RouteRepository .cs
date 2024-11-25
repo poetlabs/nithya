@@ -4,6 +4,7 @@
     using canoodleapi.Interfaces;
     using Dapper;
     using Dapper.Contrib.Extensions;
+    using Microsoft.AspNetCore.Components.Routing;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.Extensions.Options;
     using System.Data;
@@ -99,6 +100,54 @@
             return lstshift;
 
         }
+        public Shift SaveShift(Shift shift)
+        {
+            try
+            {
+
+                if (shift.ShiftID > 0)
+                {
+                    shift.updatedDate = DateTime.UtcNow;
+                    SqlMapperExtensions.Update(con, shift);
+                }
+                else
+                {
+                    shift.McStatusID = (int)Status.Active;
+                    shift.updatedDate = DateTime.UtcNow;
+                    int id = (int)SqlMapperExtensions.Insert(con, shift);
+
+                }
+                return shift;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public bool DeleteShift(int  shiftID)
+        {
+            bool isupadte = false;
+            try
+            {
+                string sql = "update Shift set McStatusID=@mcstatusID where ShiftID=@shiftID";
+                int rows = con.Execute(sql, new { shiftID = shiftID, mcstatusID = Status.InActive });
+                if (rows > 0)
+                {
+                    isupadte = true;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            return isupadte;
+        }
+        
+
+        
     }
 
 }

@@ -181,6 +181,85 @@ namespace canoodleapi.Controllers
             return apiResponse;
 
         }
+        [HttpPost]
+        [Route("SaveShift")]
+        public ApiResponseModel SaveShift([FromBody] Shift shift)
+        {
+            try
+            {
+                if (shift != null)
+                {
+                    _jsonData = JsonConvert.SerializeObject(shift);
+                    shift = _routeRepository.SaveShift(shift);
+                    _jsonData = string.Empty;
+                    if (shift != null)
+                    {
+                        resultResponse.Data = shift;
+                        resultResponse.IsError = false;
+                        _jsonData = JsonConvert.SerializeObject(shift);
+
+                    }
+                }
+                else
+                {
+                    resultResponse.Data = null;
+                    resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoDataReceived);
+                    _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                resultResponse.IsError = true;
+                resultResponse.Message = ex.Message;
+                resultResponse.StackTrace = ex.StackTrace;
+                _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+            }
+            apiResponse.Result = resultResponse;
+            _jsonData = JsonConvert.SerializeObject(apiResponse);
+            return apiResponse;
+        }
+        [HttpGet]
+        [Route("DeleteShift/{shiftID}")]
+        public ApiResponseModel DeleteShift(int shiftID)
+        {
+
+            try
+            {
+                bool isdeleted = _routeRepository.DeleteShift(shiftID);
+                _jsonData = string.Empty;
+                if (isdeleted != null)
+                {
+                    resultResponse.Data = isdeleted;
+                    resultResponse.IsError = false;
+                    _jsonData = JsonConvert.SerializeObject(isdeleted);
+
+                }
+                else
+                {
+                    resultResponse.Data = null;
+                    resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                    _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                resultResponse.IsError = true;
+                resultResponse.Message = ex.Message;
+                resultResponse.StackTrace = ex.StackTrace;
+                _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+            }
+            apiResponse.Result = resultResponse;
+            _jsonData = JsonConvert.SerializeObject(apiResponse);
+            return apiResponse;
+
+        }
 
     }
 

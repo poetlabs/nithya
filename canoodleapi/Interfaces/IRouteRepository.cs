@@ -8,6 +8,9 @@ namespace canoodleapi.Interfaces
         List<Routes> GetAllRoutes();
         bool DeleteRoutes(int routeId);
         List<Shift> GetAllShift();
+        Shift SaveShift(Shift shift);
+        bool DeleteShift(int shiftID);
+
 
 
     }
