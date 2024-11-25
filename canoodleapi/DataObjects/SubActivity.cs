@@ -17,7 +17,16 @@ namespace canoodleapi.DataObjects
         public DateTime Updateddate { get; set; }
         [Write(false)]
         public int CompletedSubActivityID { get; set; }
-
+        [Write(false)]
+        public string Status { get; set; }
+        [Write(false)]
+        public string Comments { get; set; }
+        [Write(false)]
+        public string ReadingValue { get; set; }
         
+            
+
+
+
     }
 }

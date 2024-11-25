@@ -57,7 +57,7 @@ namespace canoodleapi.Repository
             try
             {
                 List<SubActivities> lstmcommon = new List<SubActivities>();
-                string sql = "select ca.CompletedSubActivityID as CompletedSubActivityID,mc.mcommonname as Status,sa.* from SubActivities sa inner join CompletedSubActivity ca on sa.SubActivityID=ca.SubActivityID " +
+                string sql = "select ca.CompletedSubActivityID as CompletedSubActivityID,mc.mcommonname as Status,ca.Comments as Comments,ca.ReadingValue as ReadingValue,sa.* from SubActivities sa inner join CompletedSubActivity ca on sa.SubActivityID=ca.SubActivityID " +
                     " inner join MasterCommon mc on mc.mcommonid=ca.McStatusID where activityId =@activityID and ca.CompletionId=@CompletionId and McStatusID in (@McStatusID,@McStatusID1)";
                 lstmcommon = con.Query<SubActivities>(sql, new { activityID = activityID, CompletionId= CompletionId, McStatusID=(int)CompletedActivitiesStatus.Active, McStatusID1=(int)CompletedActivitiesStatus.Submitted }).ToList();
 

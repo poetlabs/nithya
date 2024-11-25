@@ -66,9 +66,17 @@ namespace canoodleapi.Repository
                     SqlMapperExtensions.Update(con, completedActivities);
                 }
                 else
-                {                    
-                    completedActivities.updateddate = DateTime.UtcNow;
-                    completedActivities.CompletionId = (int)SqlMapperExtensions.Insert(con, completedActivities);
+                {
+                    List<CompletedSubActivity> lstcompsubactivity = CheckAllSubTaskCompleted(completedActivities.CompletionId);
+                    if (lstcompsubactivity.Count > 0)
+                    {
+                        completedActivities.mcStatusID = (int)CompletedActivitiesStatus.Completed;
+                        completedActivities.updateddate = DateTime.UtcNow;
+                        completedActivities.CompletionId = (int)SqlMapperExtensions.Insert(con, completedActivities);
+                        UpdateLabourvist(completedActivities.VisitId);
+
+                    }
+                   
 
                     
                 }
@@ -222,6 +230,46 @@ namespace canoodleapi.Repository
             {
                 throw ex;
             }
+        }
+
+        private List<CompletedSubActivity> CheckAllSubTaskCompleted(int compcompletionId)
+        {
+            List<CompletedSubActivity> lstcompsubActivities = new List<CompletedSubActivity>();
+            try
+            {
+
+                string sql = "select * from CompletedSubActivity where compcompletionId =@compcompletionId and mcstatusesid=@mcstatusesid";
+                lstcompsubActivities = con.Query<CompletedSubActivity>(sql, new { compcompletionId = compcompletionId, mcstatusesid = CompletedActivitiesStatus.Submitted }).ToList();
+            }
+            catch (Exception ex)
+            { throw ex; }
+            return lstcompsubActivities;
+
+
+        }
+        private bool UpdateLabourvist(int visitId)
+        {
+
+
+            bool isupadte = false;
+
+            try
+            {
+
+                string sql = "update LaborerVisits set mcStatusID=@mcStatusID where visitId=@visitId";
+                int rows = con.Execute(sql, new { visitId = visitId, mcstatusID = LaborerVisitsStatus.VisitCompleted });
+                if (rows > 0)
+                {
+                    isupadte = true;
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+            return isupadte;
         }
 
     }
