@@ -23,6 +23,7 @@ namespace canoodleapi.DataObjects
         public int? IsPriority { get; set; }
         public string EstimatedTime { get; set; }
         public int? RouteID { get; set; }
+        public int? SpecificMonthofYear { get; set; }
 
         [Write(false)]
         public int IsSubActivityAvilable { get; set; }

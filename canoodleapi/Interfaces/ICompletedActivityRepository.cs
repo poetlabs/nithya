@@ -14,5 +14,6 @@ namespace canoodleapi.Interfaces
         CompletedSubActivity SaveCompletedSubActivity(CompletedSubActivity completedSubActivity);
         List<CompletedActivities> GetAllOutstandingTask(int laborerid);
         List<CompletedActivities> GetAllCompletedTask(int laborerid);
+        List<SubActivities> GetCompletedSubActivitybyActivityid(int activityID, int CompletionId);
     }
 }

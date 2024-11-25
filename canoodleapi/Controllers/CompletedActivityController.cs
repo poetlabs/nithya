@@ -1,5 +1,6 @@
 ﻿using canoodleapi.DataObjects;
 using canoodleapi.Interfaces;
+using canoodleapi.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Enum = System.Enum;
@@ -229,6 +230,45 @@ public class CompletedActivityController : ControllerBase
                 resultResponse.Data = lstsub;
                 resultResponse.IsError = false;
                 _jsonData = JsonConvert.SerializeObject(lstsub);
+
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+
+    }
+    [HttpGet]
+    [Route("GetCompletedSubActivitybyActivityid/{activityID}/{CompletionId}")]
+    public ApiResponseModel GetCompletedSubActivitybyActivityid(int activityID, int CompletionId)
+    {
+        List<SubActivities> lstsubactivities = new List<SubActivities>();
+        try
+        {
+            lstsubactivities = _completedActivityRepository.GetCompletedSubActivitybyActivityid(activityID, CompletionId);
+            _jsonData = string.Empty;
+            if (lstsubactivities.Count > 0)
+            {
+                resultResponse.Data = lstsubactivities;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(lstsubactivities);
 
             }
             else

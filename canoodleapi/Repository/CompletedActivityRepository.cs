@@ -313,6 +313,25 @@ namespace canoodleapi.Repository
                 throw ex;
             }
         }
+        public List<SubActivities> GetCompletedSubActivitybyActivityid(int activityID, int CompletionId)
+        {
+            try
+            {
+                List<SubActivities> lstmcommon = new List<SubActivities>();
+                string sql = "select ca.CompletedSubActivityID as CompletedSubActivityID,mc.mcommonname as Status,ca.Comments as Comments,ca.ReadingValue as ReadingValue,sa.* from SubActivities sa inner join CompletedSubActivity ca on sa.SubActivityID=ca.SubActivityID " +
+                    " inner join MasterCommon mc on mc.mcommonid=ca.McStatusID where activityId =@activityID and ca.CompletionId=@CompletionId and McStatusID in (@McStatusID)";
+                lstmcommon = con.Query<SubActivities>(sql, new { activityID = activityID, CompletionId = CompletionId, McStatusID = (int)CompletedActivitiesStatus.Completed }).ToList();
+
+                return lstmcommon;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }
+
 
     }
 }
