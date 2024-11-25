@@ -14,5 +14,13 @@ namespace canoodleapi.DataObjects
         public string commemnts { get; set; }
         public int mcStatusID { get; set; }
         public DateTime updateddate { get; set; }
+        [Write(false)]
+        public string MechineName { get; set; }
+        [Write(false)]
+        public string StatusName { get; set; }
+        [Write(false)]
+        public string Descriptions { get; set; }
+
+
     }
 }

@@ -176,4 +176,82 @@ public class CompletedActivityController : ControllerBase
         _jsonData = JsonConvert.SerializeObject(apiResponse);
         return apiResponse;
     }
+    [HttpGet]
+    [Route("GetAllOutstandingTask/{laborerid}")]
+    public ApiResponseModel GetAllOutstandingTask(int laborerid)
+    {
+        List<CompletedActivities> lstsub = new List<CompletedActivities>();
+        try
+        {
+            lstsub = _completedActivityRepository.GetAllOutstandingTask(laborerid);
+            _jsonData = string.Empty;
+            if (lstsub != null)
+            {
+                resultResponse.Data = lstsub;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(lstsub);
+
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+
+    }
+    [HttpGet]
+    [Route("GetAllCompletedTask/{laborerid}")]
+    public ApiResponseModel GetAllCompletedTask(int laborerid)
+    {
+        List<CompletedActivities> lstsub = new List<CompletedActivities>();
+        try
+        {
+            lstsub = _completedActivityRepository.GetAllCompletedTask(laborerid);
+            _jsonData = string.Empty;
+            if (lstsub != null)
+            {
+                resultResponse.Data = lstsub;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(lstsub);
+
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+
+    }
 }

@@ -271,6 +271,48 @@ namespace canoodleapi.Repository
 
             return isupadte;
         }
+        public List<CompletedActivities> GetAllOutstandingTask(int laborerid)
+        {
+            try
+            {
+                List<CompletedActivities> lstcompactivites = new List<CompletedActivities>();
+                string sql = "select m.name as MechineName,Mc.mcommonname as StatusName,Ma.descriptions as Descriptions,C.* from CompletedActivities C inner join LaborerVisits L on C.VisitID=L.VisitID " +
+                    " inner join LaborerLogin LL on L.laborerloginid=LL.laborerloginid " +
+                    " inner join MaintenanceActivities Ma on c.ActivityID=Ma.ActivityID " +
+                    " inner join Machines m on Ma.machineid=m.machineid " +
+                    " inner join MasterCommon MC on c.mcStatusID=MC.mcommonid " +
+                    " where C.mcStatusID in (@mcstatusesid,@mcstatusesid1) and laborerid=@laborerid";
+                lstcompactivites = con.Query<CompletedActivities>(sql, new { laborerid = laborerid, mcstatusesid = CompletedActivitiesStatus.Submitted, mcstatusesid1=CompletedActivitiesStatus.Active }).ToList();
+
+                return lstcompactivites;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public List<CompletedActivities> GetAllCompletedTask(int laborerid)
+        {
+            try
+            {
+                List<CompletedActivities> lstcompactivites = new List<CompletedActivities>();
+                string sql = "select m.name as MechineName,Mc.mcommonname as StatusName,Ma.descriptions as Descriptions,C.* from CompletedActivities C inner join LaborerVisits L on C.VisitID=L.VisitID " +
+                    " inner join LaborerLogin LL on L.laborerloginid=LL.laborerloginid " +
+                    " inner join MaintenanceActivities Ma on c.ActivityID=Ma.ActivityID " +
+                    " inner join Machines m on Ma.machineid=m.machineid " +
+                    " inner join MasterCommon MC on c.mcStatusID=MC.mcommonid " +
+                    " where C.mcStatusID in (@mcstatusesid) and laborerid=@laborerid";
+                lstcompactivites = con.Query<CompletedActivities>(sql, new { laborerid = laborerid, mcstatusesid = CompletedActivitiesStatus.Completed }).ToList();
+
+                return lstcompactivites;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
     }
 }

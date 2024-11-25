@@ -122,19 +122,7 @@ namespace canoodleapi.Repository
 
 
         }
-        private List<MaintenanceActivities> GetAllOutstandingTask(int loginid)
-        {
-            try
-            {
-                List<MaintenanceActivities> lstmainactivites=new List<MaintenanceActivities> ();
-                return lstmainactivites;
-
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
-        }
+        
 
 
     }

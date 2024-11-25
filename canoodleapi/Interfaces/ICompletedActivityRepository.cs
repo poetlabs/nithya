@@ -12,5 +12,7 @@ namespace canoodleapi.Interfaces
         CompletedActivities SaveCompletedActivity(CompletedActivities completedActivities);
         LaborerVisits SaveLaborVisit(LaborerVisits laborVisit);
         CompletedSubActivity SaveCompletedSubActivity(CompletedSubActivity completedSubActivity);
+        List<CompletedActivities> GetAllOutstandingTask(int laborerid);
+        List<CompletedActivities> GetAllCompletedTask(int laborerid);
     }
 }
