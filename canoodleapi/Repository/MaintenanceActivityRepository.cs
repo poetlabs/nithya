@@ -109,6 +109,7 @@ namespace canoodleapi.Repository
 
                 string sql = "SELECT ca.mcStatusID as CompletedStatusID,ca.CompletionId as CompletionId,m.name as MachineName,ma.* FROM MaintenanceActivities ma left join CompletedActivities ca on ma.activityId=ca.activityId and ca.mcStatusID  in (9) inner join Machines m on ma.machineid=m.machineid WHERE (mcintervalid = 3 AND  (DATEPART(day, @CurrentDateTime) - DATEPART(day, (select top 1 updateddate from CompletedActivities  where activityId=ma.activityId order by 1 desc))) = 1  ) " +
                     " OR (mcintervalid = 4 AND SpecificDayOfWeek = @CurrentDayOfWeek) OR (mcintervalid = 5 AND SpecificDayOfMonth = @currentday ) " +
+                    " OR (mcintervalid=13 AND CONVERT(DATE,duedate) =@CurrentDateTime)" +
                     " OR (mcintervalid = 6 AND (DATEPART(YEAR, @CurrentDateTime) - DATEPART(YEAR, (select top 1 updateddate from CompletedActivities where activityId=ma.activityId order by 1 desc))) = 1 AND " +
                     " SpecificDayOfMonth = @currentday) ";
                 lstmcommon = con.Query<MaintenanceActivities>(sql, new { CurrentTime = CurrentTime, CurrentDayOfWeek = CurrentDayOfWeek, currentday = currentday, CurrentDateTime = CurrentDateTime }).ToList();
