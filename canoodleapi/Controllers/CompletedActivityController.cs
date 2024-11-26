@@ -294,4 +294,43 @@ public class CompletedActivityController : ControllerBase
         return apiResponse;
 
     }
+    [HttpGet]
+    [Route("DeleteActivity/{visitId}/{completionId}")]
+    public ApiResponseModel DeleteActivity(int visitId, int completionId)
+    {
+        
+        try
+        {
+            bool isdeleted = _completedActivityRepository.DeleteActivity(visitId, completionId);
+            _jsonData = string.Empty;
+            if (isdeleted!=null)
+            {
+                resultResponse.Data = isdeleted;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(isdeleted);
+
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+
+    }
 }

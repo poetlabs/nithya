@@ -331,6 +331,82 @@ namespace canoodleapi.Repository
 
 
         }
+        public bool DeleteActivity(int visitId, int completionId)
+        {
+
+
+            bool isupadte = false;
+
+            try
+            {
+
+                string sql = "update CompletedSubActivity set McStatusID=@mcstatusID where completionId=@completionId";
+                int rows = con.Execute(sql, new { completionId = completionId, mcstatusID = CompletedActivitiesStatus.InActive });
+                if (rows > 0)
+                {
+                    isupadte = true;
+                    DeleteCompletedActivity(completionId);
+                    DeleteLabourVisit(visitId);
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+            return isupadte;
+        }
+        private bool DeleteCompletedActivity(int completionId)
+        {
+
+
+            bool isupadte = false;
+
+            try
+            {
+
+                string sql = "update CompletedActivities set mcStatusID=@mcstatusID where completionId=@completionId";
+                int rows = con.Execute(sql, new { completionId = completionId, mcstatusID = CompletedActivitiesStatus.InActive });
+                if (rows > 0)
+                {
+                    isupadte = true;
+
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+            return isupadte;
+        }
+        private bool DeleteLabourVisit(int visitId)
+        {
+
+
+            bool isupadte = false;
+
+            try
+            {
+
+                string sql = "update LaborerVisits set mcStatusID=@mcstatusID where visitId=@visitId";
+                int rows = con.Execute(sql, new { visitId = visitId, mcstatusID = LaborerVisitsStatus.InActive });
+                if (rows > 0)
+                {
+                    isupadte = true;
+
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+            return isupadte;
+        }
 
 
     }
