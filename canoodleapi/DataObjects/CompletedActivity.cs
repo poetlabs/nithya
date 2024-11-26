@@ -15,7 +15,7 @@ namespace canoodleapi.DataObjects
         public int mcStatusID { get; set; }
         public DateTime updateddate { get; set; }
         [Write(false)]
-        public string MechineName { get; set; }
+        public string MachineName { get; set; }
         [Write(false)]
         public string StatusName { get; set; }
         [Write(false)]

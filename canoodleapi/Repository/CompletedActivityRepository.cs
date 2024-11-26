@@ -276,7 +276,7 @@ namespace canoodleapi.Repository
             try
             {
                 List<CompletedActivities> lstcompactivites = new List<CompletedActivities>();
-                string sql = "select m.name as MechineName,Mc.mcommonname as StatusName,Ma.descriptions as Descriptions,ma.mcactivityTypeId,ma.IsPriority,C.* from CompletedActivities C inner join LaborerVisits L on C.VisitID=L.VisitID " +
+                string sql = "select m.name as MachineName,Mc.mcommonname as StatusName,Ma.descriptions as Descriptions,ma.mcactivityTypeId,ma.IsPriority,C.* from CompletedActivities C inner join LaborerVisits L on C.VisitID=L.VisitID " +
                     " inner join LaborerLogin LL on L.laborerloginid=LL.laborerloginid " +
                     " inner join MaintenanceActivities Ma on c.ActivityID=Ma.ActivityID " +
                     " inner join Machines m on Ma.machineid=m.machineid " +
