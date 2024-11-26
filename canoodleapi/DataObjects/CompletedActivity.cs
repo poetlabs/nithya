@@ -20,6 +20,9 @@ namespace canoodleapi.DataObjects
         public string StatusName { get; set; }
         [Write(false)]
         public string Descriptions { get; set; }
+        [Write(false)]
+        public int mcactivityTypeId { get; set; }
+        
 
 
     }
