@@ -89,8 +89,8 @@
             List<Shift> lstshift = new List<Shift>();
             try
             {
-                string sql = "SELECT * FROM Shift";
-                lstshift = con.Query<Shift>(sql).AsList();
+                string sql = "SELECT * FROM Shift where McStatusID=@mcstatusID";
+                lstshift = con.Query<Shift>(sql, new { mcstatusID = Status.Active }).AsList();
                 return lstshift;
             }
             catch (Exception ex)
