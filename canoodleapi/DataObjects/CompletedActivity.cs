@@ -22,7 +22,10 @@ namespace canoodleapi.DataObjects
         public string Descriptions { get; set; }
         [Write(false)]
         public int mcactivityTypeId { get; set; }
+        [Write(false)]
+        public int IsPriority { get; set; }
         
+
 
 
     }
