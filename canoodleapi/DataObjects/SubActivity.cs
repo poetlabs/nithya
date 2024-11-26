@@ -12,8 +12,8 @@ namespace canoodleapi.DataObjects
         public int Mcstatusesid { get; set; }
         public DateTime? lastChecked { get; set; }
         public int Mcactivitytypeid { get; set; }
-        public int Min { get; set; }
-        public int Max { get; set; }
+        public int? Min { get; set; }
+        public int? Max { get; set; }
         public DateTime Updateddate { get; set; }
         [Write(false)]
         public int CompletedSubActivityID { get; set; }
