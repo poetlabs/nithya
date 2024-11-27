@@ -24,7 +24,8 @@ namespace canoodleapi.DataObjects
         public string EstimatedTime { get; set; }
         public int? RouteID { get; set; }
         public int? SpecificMonthofYear { get; set; }
-
+        public int? IsHolidayApllicable { get; set; }
+        
         [Write(false)]
         public int IsSubActivityAvilable { get; set; }
         [Write(false)]
