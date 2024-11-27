@@ -16,5 +16,7 @@ namespace canoodleapi.Interfaces
         List<CompletedActivities> GetAllCompletedTask(int laborerid);
         List<SubActivities> GetCompletedSubActivitybyActivityid(int activityID, int CompletionId);
         bool DeleteActivity(int visitId, int completionId);
+        CompletedActivities UpdateSubmittedCompletedActivity(CompletedActivities completedActivities);
+        CompletedSubActivity UpdateSubmittedCompletedSubActivity(CompletedSubActivity completedsubActivities);
     }
 }

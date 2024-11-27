@@ -405,6 +405,43 @@ namespace canoodleapi.Repository
             return isupadte;
         }
 
+        public CompletedActivities UpdateSubmittedCompletedActivity(CompletedActivities completedActivities)
+        {
+            try
+            {
+                if (completedActivities.CompletionId > 0)
+                {
+                    completedActivities.updateddate = DateTime.UtcNow;
+                    completedActivities.mcStatusID = (int)CompletedActivitiesStatus.Submitted;
+                    SqlMapperExtensions.Update(con, completedActivities);
+                }
+               
+                return completedActivities;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public CompletedSubActivity UpdateSubmittedCompletedSubActivity(CompletedSubActivity completedsubActivities)
+        {
+            try
+            {
+                if (completedsubActivities.CompletedSubActivityID > 0)
+                {
+                    completedsubActivities.UpdatedDate = DateTime.UtcNow;
+                    completedsubActivities.McStatusID = (int)CompletedActivitiesStatus.Submitted;
+                    SqlMapperExtensions.Update(con, completedsubActivities);
+                }
+
+                return completedsubActivities;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
     }
 }

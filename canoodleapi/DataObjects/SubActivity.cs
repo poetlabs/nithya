@@ -23,8 +23,11 @@ namespace canoodleapi.DataObjects
         public string Comments { get; set; }
         [Write(false)]
         public string ReadingValue { get; set; }
+        [Write(false)]
+        public string HistoryJson { get; set; }
         
-            
+
+
 
 
 

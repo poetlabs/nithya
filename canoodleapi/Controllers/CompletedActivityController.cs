@@ -333,4 +333,84 @@ public class CompletedActivityController : ControllerBase
         return apiResponse;
 
     }
+    [HttpPost]
+    [Route("UpdateSubmittedCompletedActivity")]
+    public ApiResponseModel UpdateSubmittedCompletedActivity([FromBody] CompletedActivities completedActivities)
+    {
+        try
+        {
+            if (completedActivities != null)
+            {
+                _jsonData = JsonConvert.SerializeObject(completedActivities);
+                completedActivities = _completedActivityRepository.UpdateSubmittedCompletedActivity(completedActivities);
+                _jsonData = string.Empty;
+                if (completedActivities != null)
+                {
+                    resultResponse.Data = completedActivities;
+                    resultResponse.IsError = false;
+                    _jsonData = JsonConvert.SerializeObject(completedActivities);
+
+                }
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoDataReceived);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+
+            }
+        }
+        catch (Exception ex)
+        {
+
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+    }
+    [HttpPost]
+    [Route("UpdateSubmittedCompletedSubActivity")]
+    public ApiResponseModel UpdateSubmittedCompletedSubActivity([FromBody] CompletedSubActivity completedsubActivities)
+    {
+        try
+        {
+            if (completedsubActivities != null)
+            {
+                _jsonData = JsonConvert.SerializeObject(completedsubActivities);
+                completedsubActivities = _completedActivityRepository.UpdateSubmittedCompletedSubActivity(completedsubActivities);
+                _jsonData = string.Empty;
+                if (completedsubActivities != null)
+                {
+                    resultResponse.Data = completedsubActivities;
+                    resultResponse.IsError = false;
+                    _jsonData = JsonConvert.SerializeObject(completedsubActivities);
+
+                }
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoDataReceived);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+
+            }
+        }
+        catch (Exception ex)
+        {
+
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+    }
 }

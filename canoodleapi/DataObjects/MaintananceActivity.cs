@@ -36,6 +36,9 @@ namespace canoodleapi.DataObjects
         public int CompletionId { get; set; }
         [Write(false)]
         public string MachineName { get; set; }
+        [Write(false)]
+        public string HistoryJson { get; set; }
         
+
     }
 }
