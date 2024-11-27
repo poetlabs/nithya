@@ -14,7 +14,7 @@ namespace canoodleapi.DataObjects
         public string commemnts { get; set; }
         public int mcStatusID { get; set; }
         public DateTime updateddate { get; set; }
-        public DateTime LastRunDate { get; set; }
+        public DateTime? LastRunDate { get; set; }
         public string HistoryJson { get; set; }   
         [Write(false)]
         public string MachineName { get; set; }
