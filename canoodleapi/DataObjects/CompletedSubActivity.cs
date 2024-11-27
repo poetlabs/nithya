@@ -13,5 +13,6 @@ namespace canoodleapi.DataObjects
         public DateTime UpdatedDate { get; set; }
         public string Comments { get; set; }
         public string ReadingValue { get; set; }
+        public string HistoryJson { get; set; }
     }
 }
