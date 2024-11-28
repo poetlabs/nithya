@@ -499,5 +499,20 @@ namespace canoodleapi.Repository
 
 
         }
+        public string GetHistorySubActivityJson(int completedSubActivityID)
+        {
+            String Jsonda = null;
+            try
+            {
+
+                string sql = "select HistoryJson from CompletedSubActivity where CompletedSubActivityID =@completedSubActivityID";
+                Jsonda = con.Query<String>(sql, new { completedSubActivityID = completedSubActivityID }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            { throw ex; }
+            return Jsonda;
+
+
+        }
     }
 }
