@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace canoodleapi.Repository
 {
 
-    public class CompletedActivityRepository : BaseRepository,ICompletedActivityRepository
+    public class CompletedActivityRepository : BaseRepository, ICompletedActivityRepository
     {
         private IOptions<AppSettings> _appSettings;
         public CompletedActivityRepository(IOptions<AppSettings> appSettings) : base(appSettings)
@@ -17,7 +17,7 @@ namespace canoodleapi.Repository
         }
         private readonly DapperContext _context;
 
-       // public CompletedActivityRepository(DapperContext context) => _context = context;
+        // public CompletedActivityRepository(DapperContext context) => _context = context;
 
         public async Task<IEnumerable<CompletedActivities>> GetAllCompletedActivitiesAsync()
         {
@@ -62,24 +62,17 @@ namespace canoodleapi.Repository
             {
                 if (completedActivities.CompletionId > 0)
                 {
-                    completedActivities.updateddate = DateTime.UtcNow;
-                    SqlMapperExtensions.Update(con, completedActivities);
-                }
-                else
-                {
                     List<CompletedSubActivity> lstcompsubactivity = CheckAllSubTaskCompleted(completedActivities.CompletionId);
-                    if (lstcompsubactivity.Count > 0)
+                    if (lstcompsubactivity.Count == 0)
                     {
-                        completedActivities.mcStatusID = (int)CompletedActivitiesStatus.Completed;
-                        completedActivities.updateddate = DateTime.UtcNow;
-                        completedActivities.CompletionId = (int)SqlMapperExtensions.Insert(con, completedActivities);
+
+                        UpdateCompletedActivities(completedActivities.CompletionId);
                         UpdateLabourvist(completedActivities.VisitId);
-
+                        UpdateCompletedSubActivity(completedActivities.CompletionId);
                     }
-                   
 
-                    
                 }
+
                 return completedActivities;
             }
             catch (Exception ex)
@@ -97,7 +90,7 @@ namespace canoodleapi.Repository
                 if (laborVisit.VisitId > 0)
                 {
                     laborVisit.updateddate = DateTime.UtcNow;
-                    SqlMapperExtensions.Update(con,laborVisit);
+                    SqlMapperExtensions.Update(con, laborVisit);
                 }
                 else
                 {
@@ -110,11 +103,11 @@ namespace canoodleapi.Repository
                     completedActivities.ActivityId = laborVisit.ActivityID;
                     completedActivities.mcStatusID = (int)CompletedActivitiesStatus.Active;
 
-                    int completionid= SaveCompletedActivitesOnActivstatus(completedActivities);
-                    laborVisit.completionId= completionid;
+                    int completionid = SaveCompletedActivitesOnActivstatus(completedActivities);
+                    laborVisit.completionId = completionid;
                 }
 
-                
+
 
             }
             catch (Exception ex)
@@ -157,7 +150,7 @@ namespace canoodleapi.Repository
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -191,16 +184,16 @@ namespace canoodleapi.Repository
             return true;
         }
 
-        private List<SubActivities>GetAllSubActivities(int activityid)
+        private List<SubActivities> GetAllSubActivities(int activityid)
         {
-            List<SubActivities>lstsubActivities = new List<SubActivities>();
+            List<SubActivities> lstsubActivities = new List<SubActivities>();
             try
             {
-                
+
                 string sql = "select * from SubActivities where activityId =@activityid and mcstatusesid=@mcstatusesid";
-                lstsubActivities = con.Query<SubActivities>(sql, new { activityid = activityid, mcstatusesid=Status.Active }).ToList();
+                lstsubActivities = con.Query<SubActivities>(sql, new { activityid = activityid, mcstatusesid = Status.Active }).ToList();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             { throw ex; }
             return lstsubActivities;
 
@@ -218,7 +211,7 @@ namespace canoodleapi.Repository
                 }
                 else
                 {
-                    
+
                     completedSubActivity.UpdatedDate = DateTime.UtcNow;
                     completedSubActivity.CompletionId = (int)SqlMapperExtensions.Insert(con, completedSubActivity);
 
@@ -239,7 +232,7 @@ namespace canoodleapi.Repository
             {
 
                 string sql = "select * from CompletedSubActivity where compcompletionId =@compcompletionId and mcstatusesid=@mcstatusesid";
-                lstcompsubActivities = con.Query<CompletedSubActivity>(sql, new { compcompletionId = compcompletionId, mcstatusesid = CompletedActivitiesStatus.Submitted }).ToList();
+                lstcompsubActivities = con.Query<CompletedSubActivity>(sql, new { compcompletionId = compcompletionId, mcstatusesid = CompletedActivitiesStatus.Active }).ToList();
             }
             catch (Exception ex)
             { throw ex; }
@@ -282,7 +275,7 @@ namespace canoodleapi.Repository
                     " inner join Machines m on Ma.machineid=m.machineid " +
                     " inner join MasterCommon MC on c.mcStatusID=MC.mcommonid " +
                     " where C.mcStatusID in (@mcstatusesid,@mcstatusesid1) and laborerid=@laborerid";
-                lstcompactivites = con.Query<CompletedActivities>(sql, new { laborerid = laborerid, mcstatusesid = CompletedActivitiesStatus.Submitted, mcstatusesid1=CompletedActivitiesStatus.Active }).ToList();
+                lstcompactivites = con.Query<CompletedActivities>(sql, new { laborerid = laborerid, mcstatusesid = CompletedActivitiesStatus.Submitted, mcstatusesid1 = CompletedActivitiesStatus.Active }).ToList();
 
                 return lstcompactivites;
 
@@ -342,7 +335,7 @@ namespace canoodleapi.Repository
 
                 string sql = "update CompletedSubActivity set McStatusID=@mcstatusID where completionId=@completionId";
                 int rows = con.Execute(sql, new { completionId = completionId, mcstatusID = CompletedActivitiesStatus.InActive });
-              
+
                 DeleteCompletedActivity(completionId);
                 DeleteLabourVisit(visitId);
             }
@@ -415,7 +408,7 @@ namespace canoodleapi.Repository
                     completedActivities.mcStatusID = (int)CompletedActivitiesStatus.Submitted;
                     SqlMapperExtensions.Update(con, completedActivities);
                 }
-               
+
                 return completedActivities;
             }
             catch (Exception ex)
@@ -441,7 +434,70 @@ namespace canoodleapi.Repository
                 throw ex;
             }
         }
+        private bool UpdateCompletedSubActivity(int completionId)
+        {
 
 
+            bool isupadte = true;
+
+            try
+            {
+
+                string sql = "update CompletedSubActivity set McStatusID=@mcstatusID where completionId=@completionId";
+                int rows = con.Execute(sql, new { completionId = completionId, mcstatusID = CompletedActivitiesStatus.Completed });
+
+
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+            return isupadte;
+        }
+        private bool UpdateCompletedActivities(int completionId)
+        {
+
+
+            bool isupadte = false;
+
+            try
+            {
+
+                string sql = "update CompletedActivities set mcStatusID=@mcstatusID where completionId=@completionId";
+                int rows = con.Execute(sql, new { completionId = completionId, mcstatusID = CompletedActivitiesStatus.Completed });
+                if (rows > 0)
+                {
+                    isupadte = true;
+
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+            return isupadte;
+
+
+
+        }
+        public string GetHistoryJson(int completionId)
+        {
+            String Jsonda = null;
+            try
+            {
+
+                string sql = "select HistoryJson from CompletedActivities where completionId =@completionId";
+                 Jsonda = con.Query<String>(sql, new { completionId = completionId }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            { throw ex; }
+            return Jsonda;
+
+
+        }
     }
 }

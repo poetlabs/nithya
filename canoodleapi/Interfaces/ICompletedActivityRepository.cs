@@ -18,5 +18,6 @@ namespace canoodleapi.Interfaces
         bool DeleteActivity(int visitId, int completionId);
         CompletedActivities UpdateSubmittedCompletedActivity(CompletedActivities completedActivities);
         CompletedSubActivity UpdateSubmittedCompletedSubActivity(CompletedSubActivity completedsubActivities);
+        string GetHistoryJson(int completionId);
     }
 }
