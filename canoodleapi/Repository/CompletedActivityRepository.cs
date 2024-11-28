@@ -225,14 +225,14 @@ namespace canoodleapi.Repository
             }
         }
 
-        private List<CompletedSubActivity> CheckAllSubTaskCompleted(int compcompletionId)
+        private List<CompletedSubActivity> CheckAllSubTaskCompleted(int completionId)
         {
             List<CompletedSubActivity> lstcompsubActivities = new List<CompletedSubActivity>();
             try
             {
 
-                string sql = "select * from CompletedSubActivity where compcompletionId =@compcompletionId and mcstatusesid=@mcstatusesid";
-                lstcompsubActivities = con.Query<CompletedSubActivity>(sql, new { compcompletionId = compcompletionId, mcstatusesid = CompletedActivitiesStatus.Active }).ToList();
+                string sql = "select * from CompletedSubActivity where completionId =@completionId and McStatusID=@mcstatusesid";
+                lstcompsubActivities = con.Query<CompletedSubActivity>(sql, new { completionId = completionId, mcstatusesid = CompletedActivitiesStatus.Active }).ToList();
             }
             catch (Exception ex)
             { throw ex; }
