@@ -270,12 +270,27 @@ namespace canoodleapi.Repository
             try
             {
                 List<CompletedActivities> lstcompactivites = new List<CompletedActivities>();
-                string sql = "select m.name as MachineName,Mc.mcommonname as StatusName,Ma.descriptions as Descriptions,ma.mcactivityTypeId,ma.IsPriority,C.* from CompletedActivities C inner join LaborerVisits L on C.VisitID=L.VisitID " +
-                    " inner join LaborerLogin LL on L.laborerloginid=LL.laborerloginid " +
-                    " inner join MaintenanceActivities Ma on c.ActivityID=Ma.ActivityID " +
-                    " inner join Machines m on Ma.machineid=m.machineid " +
-                    " inner join MasterCommon MC on c.mcStatusID=MC.mcommonid " +
-                    " where C.mcStatusID in (@mcstatusesid,@mcstatusesid1) and laborerid=@laborerid";
+                Laborers lbr = GetLaboresbyLaborerid(laborerid);
+                string sql = null;
+                if (lbr.IsAdmin == 1)
+                {
+                    sql = "select m.name as MachineName,Mc.mcommonname as StatusName,Ma.descriptions as Descriptions,ma.mcactivityTypeId,ma.IsPriority,C.* from CompletedActivities C inner join LaborerVisits L on C.VisitID=L.VisitID " +
+                   " inner join LaborerLogin LL on L.laborerloginid=LL.laborerloginid " +
+                   " inner join MaintenanceActivities Ma on c.ActivityID=Ma.ActivityID " +
+                   " inner join Machines m on Ma.machineid=m.machineid " +
+                   " inner join MasterCommon MC on c.mcStatusID=MC.mcommonid " +
+                   " where C.mcStatusID in (@mcstatusesid,@mcstatusesid1) ";
+
+                }
+                else
+                {
+                    sql = "select m.name as MachineName,Mc.mcommonname as StatusName,Ma.descriptions as Descriptions,ma.mcactivityTypeId,ma.IsPriority,C.* from CompletedActivities C inner join LaborerVisits L on C.VisitID=L.VisitID " +
+                       " inner join LaborerLogin LL on L.laborerloginid=LL.laborerloginid " +
+                       " inner join MaintenanceActivities Ma on c.ActivityID=Ma.ActivityID " +
+                       " inner join Machines m on Ma.machineid=m.machineid " +
+                       " inner join MasterCommon MC on c.mcStatusID=MC.mcommonid " +
+                       " where C.mcStatusID in (@mcstatusesid,@mcstatusesid1) and laborerid=@laborerid";
+                }
                 lstcompactivites = con.Query<CompletedActivities>(sql, new { laborerid = laborerid, mcstatusesid = CompletedActivitiesStatus.Submitted, mcstatusesid1 = CompletedActivitiesStatus.Active }).ToList();
                 foreach (var CompletedActivities in lstcompactivites)
                 {
@@ -294,12 +309,26 @@ namespace canoodleapi.Repository
             try
             {
                 List<CompletedActivities> lstcompactivites = new List<CompletedActivities>();
-                string sql = "select m.name as MachineName,Mc.mcommonname as StatusName,Ma.descriptions as Descriptions,C.* from CompletedActivities C inner join LaborerVisits L on C.VisitID=L.VisitID " +
+                Laborers lbr = GetLaboresbyLaborerid(laborerid);
+                string sql = null;
+                if (lbr.IsAdmin == 1)
+                {
+                    sql = "select m.name as MachineName,Mc.mcommonname as StatusName,Ma.descriptions as Descriptions,C.* from CompletedActivities C inner join LaborerVisits L on C.VisitID=L.VisitID " +
                     " inner join LaborerLogin LL on L.laborerloginid=LL.laborerloginid " +
                     " inner join MaintenanceActivities Ma on c.ActivityID=Ma.ActivityID " +
                     " inner join Machines m on Ma.machineid=m.machineid " +
                     " inner join MasterCommon MC on c.mcStatusID=MC.mcommonid " +
-                    " where C.mcStatusID in (@mcstatusesid) and laborerid=@laborerid";
+                    " where C.mcStatusID in (@mcstatusesid) ";
+                }
+                else
+                {
+                    sql = "select m.name as MachineName,Mc.mcommonname as StatusName,Ma.descriptions as Descriptions,C.* from CompletedActivities C inner join LaborerVisits L on C.VisitID=L.VisitID " +
+                   " inner join LaborerLogin LL on L.laborerloginid=LL.laborerloginid " +
+                   " inner join MaintenanceActivities Ma on c.ActivityID=Ma.ActivityID " +
+                   " inner join Machines m on Ma.machineid=m.machineid " +
+                   " inner join MasterCommon MC on c.mcStatusID=MC.mcommonid " +
+                   " where C.mcStatusID in (@mcstatusesid) and laborerid=@laborerid";
+                }
                 lstcompactivites = con.Query<CompletedActivities>(sql, new { laborerid = laborerid, mcstatusesid = CompletedActivitiesStatus.Completed }).ToList();
 
                 return lstcompactivites;
@@ -589,6 +618,21 @@ namespace canoodleapi.Repository
             catch (Exception ex)
             { throw ex; }
             return completedActivities;
+
+
+        }
+        private Laborers GetLaboresbyLaborerid(int laborerId)
+        {
+            Laborers laborer = new Laborers();
+            try
+            {
+
+                string sql = "select * from Laborers where laborerId =@laborerId and mcjourneystatusid=@McStatusID";
+                laborer = con.Query<Laborers>(sql, new { laborerId = laborerId, McStatusID = (int)CompletedActivitiesStatus.Active }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            { throw ex; }
+            return laborer;
 
 
         }
