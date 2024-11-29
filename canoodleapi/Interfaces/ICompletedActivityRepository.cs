@@ -20,5 +20,6 @@ namespace canoodleapi.Interfaces
         CompletedSubActivity UpdateSubmittedCompletedSubActivity(CompletedSubActivity completedsubActivities);
         string GetHistoryJson(int completionId);
         string GetHistorySubActivityJson(int CompletedSubActivityID);
+        int GetPercentage(int completionid);
     }
 }

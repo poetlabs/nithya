@@ -4,6 +4,7 @@ using Dapper;
 using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
+using System.Runtime.Intrinsics.X86;
 
 namespace canoodleapi.Repository
 {
@@ -276,7 +277,10 @@ namespace canoodleapi.Repository
                     " inner join MasterCommon MC on c.mcStatusID=MC.mcommonid " +
                     " where C.mcStatusID in (@mcstatusesid,@mcstatusesid1) and laborerid=@laborerid";
                 lstcompactivites = con.Query<CompletedActivities>(sql, new { laborerid = laborerid, mcstatusesid = CompletedActivitiesStatus.Submitted, mcstatusesid1 = CompletedActivitiesStatus.Active }).ToList();
-
+                foreach (var CompletedActivities in lstcompactivites)
+                {
+                    CompletedActivities.Percentage = GetPercentage(CompletedActivities.CompletionId);
+                }
                 return lstcompactivites;
 
             }
@@ -511,6 +515,80 @@ namespace canoodleapi.Repository
             catch (Exception ex)
             { throw ex; }
             return Jsonda;
+
+
+        }
+
+        public int GetPercentage(int completionid)
+        {
+            int percentage = 0;
+            try
+            {
+                List<CompletedSubActivity> lstcompleted= GetHSubActivit(completionid);
+                if (lstcompleted.Count == 0)
+                {
+                    CompletedActivities completedActivities = GetCompletedA(completionid);
+                    if (completedActivities.mcStatusID == (int)CompletedActivitiesStatus.Assigned)
+                    {
+                        percentage = 20;
+                    }
+                   else if (completedActivities.mcStatusID == (int)CompletedActivitiesStatus.Submitted)
+                   {
+                        percentage = 70;
+                    }
+                    else if (completedActivities.mcStatusID == (int)CompletedActivitiesStatus.Completed)
+                    {
+                        percentage = 100;
+                    }
+
+                }
+                else
+                {
+                    int count = lstcompleted.Count;
+                    int AssignedCount=   (int)lstcompleted?.FindAll(a => a.McStatusID == (int)CompletedActivitiesStatus.Active).Count();
+                    int SubmittedCount = (int)lstcompleted?.FindAll(a => a.McStatusID == (int)CompletedActivitiesStatus.Submitted).Count();
+                    int Assignedper = 20;
+
+                      int subper  =(70 / count) * SubmittedCount;
+                    percentage = Assignedper + subper;
+
+
+                }
+
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            return percentage;
+        }
+        private List<CompletedSubActivity> GetHSubActivit(int completionId)
+        {
+            List <CompletedSubActivity> activit = new List<CompletedSubActivity>();
+            try
+            {
+
+                string sql = "select * from CompletedSubActivity where CompletionId =@completionId and McStatusID not in (@McStatusID)";
+                activit = con.Query<CompletedSubActivity>(sql, new { completionId = completionId, McStatusID = (int)CompletedActivitiesStatus.InActive }).ToList();
+            }
+            catch (Exception ex)
+            { throw ex; }
+            return activit;
+
+
+        }
+        public CompletedActivities GetCompletedA(int completionId)
+        {
+            CompletedActivities completedActivities = new CompletedActivities();
+            try
+            {
+
+                string sql = "select * from CompletedActivities where completionId =@completionId and mcStatusID not in (@McStatusID)";
+                completedActivities = con.Query<CompletedActivities>(sql, new { completionId = completionId, McStatusID = (int)CompletedActivitiesStatus.InActive }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            { throw ex; }
+            return completedActivities;
 
 
         }

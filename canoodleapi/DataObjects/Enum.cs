@@ -19,6 +19,7 @@
         Submitted = 10,
         InActive = 11,
         Completed = 12,
+        Assigned= 19
     }
     public enum LaborerVisitsStatus
     {

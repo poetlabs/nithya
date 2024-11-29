@@ -26,7 +26,9 @@ namespace canoodleapi.DataObjects
         public int mcactivityTypeId { get; set; }
         [Write(false)]
         public int IsPriority { get; set; }
-        
+        [Write(false)]
+        public int Percentage { get; set; }
+
 
 
 
