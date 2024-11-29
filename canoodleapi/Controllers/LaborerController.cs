@@ -188,5 +188,44 @@ public class LaborerController : ControllerBase
         return apiResponse;
 
     }
+    [HttpGet]
+    [Route("DeleteLaborers/{laborerId}")]
+    public ApiResponseModel DeleteLaborers(int laborerId)
+    {
+
+        try
+        {
+            bool isdeleted = _laborerRepository.DeleteLaborers(laborerId);
+            _jsonData = string.Empty;
+            if (isdeleted != null)
+            {
+                resultResponse.Data = isdeleted;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(isdeleted);
+
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+
+    }
 
 }

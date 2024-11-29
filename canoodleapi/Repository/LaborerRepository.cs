@@ -113,5 +113,30 @@ namespace canoodleapi.Repository
             return lstLaborers;
 
         }
+
+        public bool DeleteLaborers(int laborerId)
+        {
+
+
+            bool isupadte = false;
+
+            try
+            {
+
+                string sql = "update Laborers set mcjourneystatusid=@mcstatusID where laborerId=@laborerId";
+                int rows = con.Execute(sql, new { laborerId = laborerId, mcstatusID = Status.InActive });
+                if (rows > 0)
+                {
+                    isupadte = true;
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+            return isupadte;
+        }
     }
 }

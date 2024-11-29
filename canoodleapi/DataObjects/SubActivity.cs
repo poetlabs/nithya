@@ -25,7 +25,9 @@ namespace canoodleapi.DataObjects
         public string ReadingValue { get; set; }
         [Write(false)]
         public string HistoryJson { get; set; }
-        
+        [Write(false)]
+        public int Statusid { get; set; }
+
 
 
 
