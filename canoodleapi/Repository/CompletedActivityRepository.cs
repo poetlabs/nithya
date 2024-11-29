@@ -528,7 +528,7 @@ namespace canoodleapi.Repository
                 if (lstcompleted.Count == 0)
                 {
                     CompletedActivities completedActivities = GetCompletedA(completionid);
-                    if (completedActivities.mcStatusID == (int)CompletedActivitiesStatus.Assigned)
+                    if (completedActivities.mcStatusID == (int)CompletedActivitiesStatus.Active)
                     {
                         percentage = 20;
                     }

@@ -1,5 +1,6 @@
 ﻿using canoodleapi.DataObjects;
 using canoodleapi.Interfaces;
+using canoodleapi.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -144,6 +145,48 @@ public class LaborerController : ControllerBase
         apiResponse.Result = resultResponse;
         _jsonData = JsonConvert.SerializeObject(apiResponse);
         return apiResponse;
+    }
+    [HttpGet]
+    [Route("GetAllUsers")]
+    public ApiResponseModel GetAllUsers()
+    {
+
+
+        try
+        {
+            List<Laborers> lstlabores = _laborerRepository.GetAllUsers();
+
+            _jsonData = string.Empty;
+            if (lstlabores != null)
+            {
+                resultResponse.Data = lstlabores;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(lstlabores);
+
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+
     }
 
 }

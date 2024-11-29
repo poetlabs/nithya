@@ -96,5 +96,22 @@ namespace canoodleapi.Repository
            
 
         }
+        public List<Laborers> GetAllUsers()
+        {
+            List<Laborers> lstLaborers = new List<Laborers>();
+            try
+            {
+                string sql = "SELECT * FROM Laborers where mcjourneystatusid=@mcstatusID";
+                lstLaborers = con.Query<Laborers>(sql, new { mcstatusID = Status.Active }).AsList();
+
+                return lstLaborers;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return lstLaborers;
+
+        }
     }
 }
