@@ -145,9 +145,53 @@
             }
             return isupadte;
         }
-        
+        public Role SaveRole(Role role)
+        {
+            try
+            {
 
-        
+                if (role.RoleID > 0)
+                {
+                    role.UpdatedDate = DateTime.UtcNow;
+                    SqlMapperExtensions.Update(con, role);
+                }
+                else
+                {
+                    role.McStatusID = (int)Status.Active;
+                    role.UpdatedDate = DateTime.UtcNow;
+                    int id = (int)SqlMapperExtensions.Insert(con, role);
+
+                }
+                return role;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public List<Role> GetAllRole()
+        {
+            List<Role> lstRoles = new List<Role>();
+            try
+            {
+                string sql = "SELECT * FROM Role where McStatusID=@mcstatusID";
+                lstRoles = con.Query<Role>(sql, new { mcstatusID = Status.Active }).AsList();
+                return lstRoles;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return lstRoles;
+
+        }
+
+
+
+
+
     }
 
 }

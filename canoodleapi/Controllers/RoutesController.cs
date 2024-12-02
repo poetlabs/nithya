@@ -260,6 +260,85 @@ namespace canoodleapi.Controllers
             return apiResponse;
 
         }
+        [HttpPost]
+        [Route("SaveRole")]
+        public ApiResponseModel SaveRole([FromBody] Role role)
+        {
+            try
+            {
+                if (role != null)
+                {
+                    _jsonData = JsonConvert.SerializeObject(role);
+                    role = _routeRepository.SaveRole(role);
+                    _jsonData = string.Empty;
+                    if (role != null)
+                    {
+                        resultResponse.Data = role;
+                        resultResponse.IsError = false;
+                        _jsonData = JsonConvert.SerializeObject(role);
+
+                    }
+                }
+                else
+                {
+                    resultResponse.Data = null;
+                    resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoDataReceived);
+                    _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                resultResponse.IsError = true;
+                resultResponse.Message = ex.Message;
+                resultResponse.StackTrace = ex.StackTrace;
+                _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+            }
+            apiResponse.Result = resultResponse;
+            _jsonData = JsonConvert.SerializeObject(apiResponse);
+            return apiResponse;
+        }
+        [HttpGet]
+        [Route("GetAllRole")]
+        public ApiResponseModel GetAllRole()
+        {
+            try
+            {
+                List<Role> lstrole = _routeRepository.GetAllRole();
+                _jsonData = string.Empty;
+                if (lstrole != null)
+                {
+                    resultResponse.Data = lstrole;
+                    resultResponse.IsError = false;
+                    _jsonData = JsonConvert.SerializeObject(lstrole);
+
+                }
+                else
+                {
+                    resultResponse.Data = null;
+                    resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                    _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                resultResponse.IsError = true;
+                resultResponse.Message = ex.Message;
+                resultResponse.StackTrace = ex.StackTrace;
+                _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+            }
+            apiResponse.Result = resultResponse;
+            _jsonData = JsonConvert.SerializeObject(apiResponse);
+            return apiResponse;
+
+        }
 
     }
 

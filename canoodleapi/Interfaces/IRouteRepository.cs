@@ -10,7 +10,8 @@ namespace canoodleapi.Interfaces
         List<Shift> GetAllShift();
         Shift SaveShift(Shift shift);
         bool DeleteShift(int shiftID);
-
+        Role SaveRole(Role role);
+        List<Role> GetAllRole();
 
 
     }
