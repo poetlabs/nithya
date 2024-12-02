@@ -12,7 +12,7 @@ namespace canoodleapi.DataObjects
         public int qpin { get; set; }
         public int mcjourneystatusid { get; set; }        
         public string CurrentRoute { get; set; }
-        public DateTime StartedAt { get; set; }
+        public DateTime? StartedAt { get; set; }
         public DateTime updateddate { get; set; }
         public int? IsAdmin { get; set; }
         
