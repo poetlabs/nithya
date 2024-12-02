@@ -272,7 +272,7 @@ namespace canoodleapi.Repository
                 List<CompletedActivities> lstcompactivites = new List<CompletedActivities>();
                 Laborers lbr = GetLaboresbyLaborerid(laborerid);
                 string sql = null;
-                if (lbr.IsAdmin == 1)
+                if (lbr?.IsAdmin == 1)
                 {
                     sql = "select m.name as MachineName,Mc.mcommonname as StatusName,Ma.descriptions as Descriptions,ma.mcactivityTypeId,ma.IsPriority,C.* from CompletedActivities C inner join LaborerVisits L on C.VisitID=L.VisitID " +
                    " inner join LaborerLogin LL on L.laborerloginid=LL.laborerloginid " +
@@ -628,7 +628,7 @@ namespace canoodleapi.Repository
             {
 
                 string sql = "select * from Laborers where laborerId =@laborerId and mcjourneystatusid=@McStatusID";
-                laborer = con.Query<Laborers>(sql, new { laborerId = laborerId, McStatusID = (int)CompletedActivitiesStatus.Active }).FirstOrDefault();
+                laborer = con.Query<Laborers>(sql, new { laborerId = laborerId, McStatusID = (int)Status.Active }).FirstOrDefault();
             }
             catch (Exception ex)
             { throw ex; }
