@@ -15,9 +15,10 @@ namespace canoodleapi.DataObjects
         public DateTime? StartedAt { get; set; }
         public DateTime updateddate { get; set; }
         public int? IsAdmin { get; set; }
-        
-        
-            
+        public int? RoleID { get; set; }
+
+
+
     }
 
     public class UserloginInput

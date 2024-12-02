@@ -3,6 +3,7 @@ using canoodleapi.Interfaces;
 using canoodleapi.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using Enum = System.Enum;
 
 namespace canoodleapi.Controllers
@@ -338,6 +339,46 @@ namespace canoodleapi.Controllers
             _jsonData = JsonConvert.SerializeObject(apiResponse);
             return apiResponse;
 
+        }
+        [HttpPost]
+        [Route("SaveRoleRouteMapping")]
+        public ApiResponseModel SaveRoleRouteMapping([FromBody] List<RoleRouteMapping> lstroleroutemapping)
+        {
+            try
+            {
+                if (lstroleroutemapping != null)
+                {
+                    _jsonData = JsonConvert.SerializeObject(lstroleroutemapping);
+                    List <RoleRouteMapping>lstmapping = _routeRepository.SaveRoleRouteMapping(lstroleroutemapping);
+                    _jsonData = string.Empty;
+                    if (lstmapping != null)
+                    {
+                        resultResponse.Data = lstroleroutemapping;
+                        resultResponse.IsError = false;
+                        _jsonData = JsonConvert.SerializeObject(lstroleroutemapping);
+
+                    }
+                }
+                else
+                {
+                    resultResponse.Data = null;
+                    resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoDataReceived);
+                    _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                resultResponse.IsError = true;
+                resultResponse.Message = ex.Message;
+                resultResponse.StackTrace = ex.StackTrace;
+                _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+            }
+            apiResponse.Result = resultResponse;
+            _jsonData = JsonConvert.SerializeObject(apiResponse);
+            return apiResponse;
         }
 
     }

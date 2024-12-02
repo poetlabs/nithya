@@ -12,7 +12,7 @@ namespace canoodleapi.Interfaces
         bool DeleteShift(int shiftID);
         Role SaveRole(Role role);
         List<Role> GetAllRole();
-
+        List<RoleRouteMapping> SaveRoleRouteMapping(List<RoleRouteMapping> lstroleroutemapping);
 
     }
 }

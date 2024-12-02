@@ -187,6 +187,34 @@
             return lstRoles;
 
         }
+        public List<RoleRouteMapping> SaveRoleRouteMapping(List<RoleRouteMapping> lstroleroutemapping)
+        {
+            try
+            {
+                lstroleroutemapping.ForEach(delegate (RoleRouteMapping roleRouteMapping)
+                {
+                    if (roleRouteMapping.RoleRouteMappingID > 0)
+
+                    {
+                        roleRouteMapping.UpdatedDate = DateTime.UtcNow;
+                        SqlMapperExtensions.Update(con, roleRouteMapping);
+                    }
+                    else
+                    {
+
+                        roleRouteMapping.UpdatedDate = DateTime.UtcNow;
+                        roleRouteMapping.McStatusID = (int)Status.Active;
+                        roleRouteMapping.RoleRouteMappingID = (int)SqlMapperExtensions.Insert(con, roleRouteMapping);
+
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return lstroleroutemapping;
+        }
 
 
 
