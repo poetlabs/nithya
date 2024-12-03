@@ -215,6 +215,24 @@
             }
             return lstroleroutemapping;
         }
+        public bool DeleteRole(int roleID)
+        {
+            bool isupadte = false;
+            try
+            {
+                string sql = "update Role set McStatusID=@mcstatusID where RoleID=@roleID";
+                int rows = con.Execute(sql, new { roleID = roleID, mcstatusID = Status.InActive });
+                if (rows > 0)
+                {
+                    isupadte = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return isupadte;
+        }
 
 
 

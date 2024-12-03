@@ -13,6 +13,7 @@ namespace canoodleapi.Interfaces
         Role SaveRole(Role role);
         List<Role> GetAllRole();
         List<RoleRouteMapping> SaveRoleRouteMapping(List<RoleRouteMapping> lstroleroutemapping);
+        bool DeleteRole(int roleID);
 
     }
 }
