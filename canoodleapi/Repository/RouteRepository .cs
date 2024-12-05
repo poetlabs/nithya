@@ -233,6 +233,22 @@
             }
             return isupadte;
         }
+        public List<RoleRouteMapping> GetAllRoleRouteMapping()
+        {
+            List<RoleRouteMapping> lstRolesrouting = new List<RoleRouteMapping>();
+            try
+            {
+                string sql = "select routeName,RoleName,RRM.* from RoleRouteMapping RRM inner join Role r on RRm.roleid=r.roleid inner join Routes ro on rrm.routeid=ro.routeid where RRM.mcstatusid=@mcstatusID";
+                lstRolesrouting = con.Query<RoleRouteMapping>(sql, new { mcstatusID = Status.Active }).AsList();
+                return lstRolesrouting;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return lstRolesrouting;
+
+        }
 
 
 

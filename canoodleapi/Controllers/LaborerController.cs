@@ -227,5 +227,47 @@ public class LaborerController : ControllerBase
         return apiResponse;
 
     }
+    [HttpPost]
+    [Route("SaveLoginQRGenerater")]
+    public ApiResponseModel SaveLoginQRGenerater([FromBody] LoginQRGenerater loginQRGenerater)
+    {
+        try
+        {
+            if (loginQRGenerater != null)
+            {
+                _jsonData = JsonConvert.SerializeObject(loginQRGenerater);
+
+                loginQRGenerater = _laborerRepository.SaveLoginQRGenerater(loginQRGenerater);
+                _jsonData = string.Empty;
+                if (loginQRGenerater != null)
+                {
+                    resultResponse.Data = loginQRGenerater;
+                    resultResponse.IsError = false;
+                    _jsonData = JsonConvert.SerializeObject(loginQRGenerater);
+
+                }
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoDataReceived);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+
+            }
+        }
+        catch (Exception ex)
+        {
+
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+    }
+
 
 }

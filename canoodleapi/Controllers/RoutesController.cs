@@ -419,6 +419,45 @@ namespace canoodleapi.Controllers
             return apiResponse;
 
         }
+        [HttpGet]
+        [Route("GetAllRoleRouteMapping")]
+        public ApiResponseModel GetAllRoleRouteMapping()
+        {
+            try
+            {
+                List<RoleRouteMapping> lstroleroutemapping = _routeRepository.GetAllRoleRouteMapping();
+                _jsonData = string.Empty;
+                if (lstroleroutemapping != null)
+                {
+                    resultResponse.Data = lstroleroutemapping;
+                    resultResponse.IsError = false;
+                    _jsonData = JsonConvert.SerializeObject(lstroleroutemapping);
+
+                }
+                else
+                {
+                    resultResponse.Data = null;
+                    resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                    _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                resultResponse.IsError = true;
+                resultResponse.Message = ex.Message;
+                resultResponse.StackTrace = ex.StackTrace;
+                _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+            }
+            apiResponse.Result = resultResponse;
+            _jsonData = JsonConvert.SerializeObject(apiResponse);
+            return apiResponse;
+
+        }
 
     }
 

@@ -8,5 +8,8 @@ namespace canoodleapi.Interfaces
         LaborerLogin UserLogin(UserloginInput userlogin);
         List<Laborers> GetAllUsers();
         bool DeleteLaborers(int laborerId);
+        LoginQRGenerater SaveLoginQRGenerater(LoginQRGenerater loginQRGenerater);
+
+
     }
 }

@@ -3,6 +3,7 @@ using canoodleapi.Interfaces;
 using Dapper;
 using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Options;
+using System;
 using System.Net;
 using System.Reflection.PortableExecutable;
 
@@ -137,6 +138,52 @@ namespace canoodleapi.Repository
             }
 
             return isupadte;
+        }
+
+        private string RandomKeyGenerator()
+        {
+            try
+            {
+                int length = 6;
+                 Random random = new Random();                
+                const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                return new string(Enumerable.Repeat(chars, length)
+                    .Select(s => s[random.Next(s.Length)]).ToArray());
+               
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public LoginQRGenerater SaveLoginQRGenerater(LoginQRGenerater loginQRGenerater)
+        {
+            try
+            {
+                if (loginQRGenerater.loginqrid > 0)
+                {
+                    loginQRGenerater.updateddate = DateTime.UtcNow;
+                    SqlMapperExtensions.Update(con, loginQRGenerater);
+                }
+                else
+                {
+                    loginQRGenerater.statusesid = Convert.ToInt32(LoginQrStatus.Generated);
+                    loginQRGenerater.updateddate = DateTime.UtcNow;
+                    loginQRGenerater.generatedat = DateTime.UtcNow;
+                    loginQRGenerater.passcode = RandomKeyGenerator();
+                    loginQRGenerater.loginqrid = (int)SqlMapperExtensions.Insert(con, loginQRGenerater);
+
+                }
+                return loginQRGenerater;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }

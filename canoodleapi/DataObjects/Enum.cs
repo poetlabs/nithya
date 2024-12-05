@@ -27,4 +27,10 @@
         InActive = 15,
         VisitCompleted = 16,
     }
+    public enum LoginQrStatus
+    {
+        Generated = 20,
+        Scanned = 21,
+        Completd = 22,
+    }
 }

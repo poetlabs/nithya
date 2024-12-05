@@ -13,5 +13,9 @@ namespace canoodleapi.DataObjects
         public int? SortOrder { get; set; }
         public DateTime UpdatedDate { get; set; }
         public int? McStatusID { get; set; }
+        [Write(false)]
+        public string routeName { get; set; }
+        [Write(false)]
+        public string RoleName { get; set; }
     }
 }
