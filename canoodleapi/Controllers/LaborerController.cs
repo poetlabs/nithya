@@ -268,6 +268,87 @@ public class LaborerController : ControllerBase
         _jsonData = JsonConvert.SerializeObject(apiResponse);
         return apiResponse;
     }
+    [HttpPost]
+    [Route("CheckQrPasswordMatching")]
+    public ApiResponseModel CheckQrPasswordMatching([FromBody] CheckQrInput checkQrInput)
+    {
+        try
+        {
+            if (checkQrInput != null)
+            {
+                LoginQRGenerater laborerslogin = new LoginQRGenerater();
+                _jsonData = JsonConvert.SerializeObject(checkQrInput);
+
+                laborerslogin = _laborerRepository.CheckQrPasswordMatching(checkQrInput);
+                _jsonData = string.Empty;
+                if (laborerslogin != null)
+                {
+                    resultResponse.Data = laborerslogin;
+                    resultResponse.IsError = false;
+                    _jsonData = JsonConvert.SerializeObject(laborerslogin);
+
+                }
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoDataReceived);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+
+            }
+        }
+        catch (Exception ex)
+        {
+
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+    }
+    [HttpGet]
+    [Route("CheckScannedQrISAvailable/{logindata}")]
+    public ApiResponseModel CheckScannedQrISAvailable(string logindata)
+    {
+
+        try
+        {
+            LoginQRGenerater loginQRGenerater = _laborerRepository.CheckScannedQrISAvailable(logindata);
+            _jsonData = string.Empty;
+            if (loginQRGenerater != null)
+            {
+                resultResponse.Data = loginQRGenerater;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(loginQRGenerater);
+
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+
+    }
 
 
 }

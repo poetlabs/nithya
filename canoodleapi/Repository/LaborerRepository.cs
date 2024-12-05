@@ -185,5 +185,65 @@ namespace canoodleapi.Repository
             }
 
         }
+        public LoginQRGenerater CheckQrPasswordMatching(CheckQrInput checkQrInput)
+        {
+            try
+            {
+                LoginQRGenerater loginQRGenerater = new LoginQRGenerater();
+                string sql = "SELECT * FROM LoginQRGenerater where loginqrid=@loginqrid and passcode=@passcode and statusesid=@statusesid";
+                loginQRGenerater = con.Query<LoginQRGenerater>(sql, new { loginqrid = checkQrInput.loginqrid, passcode=checkQrInput.Passcode, statusesid= LoginQrStatus.Scanned }).FirstOrDefault();
+
+
+                return loginQRGenerater; 
+            }
+            catch(Exception ex )
+            {
+                throw ex;
+            }
+        }
+        public LoginQRGenerater CheckScannedQrISAvailable(string logindata)
+        {
+            try
+            {
+                LoginQRGenerater loginQRGenerater = new LoginQRGenerater();
+                string sql = "SELECT * FROM LoginQRGenerater where logindata=@logindata  and statusesid=@statusesid";
+                loginQRGenerater = con.Query<LoginQRGenerater>(sql, new { logindata = logindata, statusesid = LoginQrStatus.Generated }).FirstOrDefault();
+                if (loginQRGenerater != null)
+                {
+                   UpdateReleasedStatus(loginQRGenerater.loginqrid);
+                }
+
+
+                return loginQRGenerater;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        private bool UpdateReleasedStatus(int loginqrid)
+        {
+
+
+            bool isupadte = false;
+
+            try
+            {
+
+                string sql = "update LoginQRGenerater set statusesid=@statusesid where loginqrid=@loginqrid";
+                int rows = con.Execute(sql, new { loginqrid = loginqrid, statusesid = LoginQrStatus.Scanned });
+                if (rows > 0)
+                {
+                    isupadte = true;
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+            return isupadte;
+        }
     }
 }

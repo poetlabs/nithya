@@ -28,4 +28,10 @@ namespace canoodleapi.DataObjects
         public string systemid { get; set; }
         public int loginid { get; set; }
     }
+
+    public class CheckQrInput
+    {
+        public string Passcode { get; set; }
+        public int loginqrid { get; set; }
+    }
 }
