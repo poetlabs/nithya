@@ -28,6 +28,9 @@ namespace canoodleapi.DataObjects
         public int IsPriority { get; set; }
         [Write(false)]
         public int Percentage { get; set; }
+        [Write(false)]
+        public int machineId { get; set; }
+        
 
 
 
