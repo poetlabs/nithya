@@ -81,6 +81,8 @@ namespace canoodleapi.Repository
                     laborerLogin.Loginqrid = userlogin.loginqrid;
                     laborerLogin.Laborerloginid = (int)SqlMapperExtensions.Insert(con, laborerLogin);
                     laborerLogin.Laborername = userexist.fullname;
+                    int statusid = Convert.ToInt32(LoginQrStatus.Completd);
+                    UpdateReleasedStatus(userlogin.loginqrid, statusid);
                 }
                 
 
@@ -212,7 +214,8 @@ namespace canoodleapi.Repository
                 loginQRGenerater = con.Query<LoginQRGenerater>(sql, new { logindata = logindata, statusesid = LoginQrStatus.Generated }).FirstOrDefault();
                 if (loginQRGenerater != null)
                 {
-                   UpdateReleasedStatus(loginQRGenerater.loginqrid);
+                    int statusid = (int)LoginQrStatus.Scanned;
+                   UpdateReleasedStatus(loginQRGenerater.loginqrid, statusid);
                 }
 
 
@@ -223,7 +226,7 @@ namespace canoodleapi.Repository
                 throw ex;
             }
         }
-        private bool UpdateReleasedStatus(int loginqrid)
+        private bool UpdateReleasedStatus(int loginqrid,int statusesid)
         {
 
 
@@ -233,7 +236,7 @@ namespace canoodleapi.Repository
             {
 
                 string sql = "update LoginQRGenerater set statusesid=@statusesid where loginqrid=@loginqrid";
-                int rows = con.Execute(sql, new { loginqrid = loginqrid, statusesid = LoginQrStatus.Scanned });
+                int rows = con.Execute(sql, new { loginqrid = loginqrid, statusesid = statusesid });
                 if (rows > 0)
                 {
                     isupadte = true;
