@@ -1,4 +1,5 @@
 ﻿using canoodleapi.DataObjects;
+using Microsoft.AspNetCore.Mvc;
 
 namespace canoodleapi.Interfaces
 {
@@ -9,6 +10,7 @@ namespace canoodleapi.Interfaces
         List<MasterCommon> GetCommonmasterbytypeid(int mcommontypeid);
         List<MaintenanceActivities> GetAllMaintanceactivityForHomescrren();
         List<SubActivities> Getallsubactivitybyid(int activityid);
+        bool UploadFiles(string Filename, int ActivityID, [FromForm] IFormFile act, string FilePath);
     }
 
 }

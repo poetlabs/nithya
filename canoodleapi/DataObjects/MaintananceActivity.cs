@@ -1,4 +1,5 @@
 ﻿using Dapper.Contrib.Extensions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace canoodleapi.DataObjects
 {
@@ -39,8 +40,9 @@ namespace canoodleapi.DataObjects
         [Write(false)]
         public string MachineName { get; set; }
         [Write(false)]
-        public string HistoryJson { get; set; }
-        
+        public string HistoryJson { get; set; }     
+
+
 
     }
 }

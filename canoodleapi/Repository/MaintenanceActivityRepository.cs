@@ -2,6 +2,7 @@
 using canoodleapi.Interfaces;
 using Dapper;
 using Dapper.Contrib.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.Extensions.Options;
 
@@ -131,7 +132,48 @@ namespace canoodleapi.Repository
 
 
         }
-        
+        public bool UploadFiles(string Filename, int ActivityID, [FromForm] IFormFile act,string FilePath)
+        {
+            try
+            {
+                if (act != null)
+                {
+
+                    string path = FilePath + @"\" + Filename;
+
+                    if (!Directory.Exists(FilePath))
+                    {
+                        Directory.CreateDirectory(FilePath);
+                    }
+                    UpdateFilePath(ActivityID, Filename);
+                }
+                    return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        private bool UpdateFilePath(int ActivityID, string Filename)
+        {
+            bool isupadte = false;
+            try
+            {
+                string sql = "update MaintenanceActivities set FilePath=@FilePath where activityId=@activityId";
+                int rows = con.Execute(sql, new { FilePath = Filename, activityId = ActivityID });
+                if (rows > 0)
+                {
+                    isupadte = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return isupadte;
+        }
+
+
 
 
     }

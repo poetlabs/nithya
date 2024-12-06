@@ -2,6 +2,7 @@
 using canoodleapi.Interfaces;
 using canoodleapi.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Enum = System.Enum;
 
@@ -12,14 +13,16 @@ public class MaintenanceActivityController : ControllerBase
     ApiResponseModel apiResponse;
     ResultResponseModel resultResponse;
     string _jsonData = string.Empty;
+    IConfiguration _iconfiguration;
     private readonly IMaintenanceActivityRepository _activityRepository;
 
-    public MaintenanceActivityController(IMaintenanceActivityRepository activityRepository)
+    public MaintenanceActivityController(IMaintenanceActivityRepository activityRepository, IConfiguration iconfiguration)
     {
         _activityRepository = activityRepository;
         resultResponse = new ResultResponseModel();
         apiResponse = new ApiResponseModel();
         apiResponse.Result = new ResultResponseModel();
+        _iconfiguration = iconfiguration;
     }
     [HttpPost]
     [Route("SaveMaintenanceActivity")]
@@ -178,7 +181,49 @@ public class MaintenanceActivityController : ControllerBase
         return apiResponse;
 
     }
-    
+    [HttpPost]
+    [Route("UploadFiles/{FileName}/{ActivityID}")]
+    public ApiResponseModel UploadFiles(string Filename, int ActivityID, [FromForm] IFormFile act)
+    {
+        try
+        {
+
+            string FilePath = _iconfiguration.GetSection("Documents").GetSection("BulkOrders").Value;            
+            bool files = _activityRepository.UploadFiles(Filename, ActivityID, act, FilePath);
+
+
+            if (files != null)
+            {
+                resultResponse.Data = files;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(files);
+               
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+               
+
+            }
+        }
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            apiResponse.Result = resultResponse;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+
+
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);       
+        return apiResponse;
+    }
+
 
 
 }
