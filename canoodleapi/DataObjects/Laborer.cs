@@ -27,6 +27,7 @@ namespace canoodleapi.DataObjects
         public int qpin { get; set; }
         public string systemid { get; set; }
         public int loginid { get; set; }
+        public int loginqrid { get; set; }
     }
 
     public class CheckQrInput

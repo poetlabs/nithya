@@ -5,6 +5,7 @@ using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Net;
+using System.Net.Sockets;
 using System.Reflection.PortableExecutable;
 
 namespace canoodleapi.Repository
@@ -71,12 +72,13 @@ namespace canoodleapi.Repository
                 Laborers userexist = GetlaborerbyUsername(userlogin.username, userlogin.qpin);
 
                 if (userexist!=null)
-                {                   
+                {
+                    string  ips = GetLocalIPAddress();
                     laborerLogin.Laborerid = userexist.LaborerId;
-                    laborerLogin.Systemid = userlogin.systemid;
+                    laborerLogin.Systemid = ips;
                     laborerLogin.Logindate = DateTime.Now;
                     laborerLogin.Updateddate = DateTime.UtcNow;
-                    laborerLogin.Loginqrid = 1;
+                    laborerLogin.Loginqrid = userlogin.loginqrid;
                     laborerLogin.Laborerloginid = (int)SqlMapperExtensions.Insert(con, laborerLogin);
                     laborerLogin.Laborername = userexist.fullname;
                 }
@@ -244,6 +246,18 @@ namespace canoodleapi.Repository
             }
 
             return isupadte;
+        }
+        private  string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("No network adapters with an IPv4 address in the system!");
         }
     }
 }
