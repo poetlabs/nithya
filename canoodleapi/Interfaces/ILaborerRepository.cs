@@ -11,6 +11,7 @@ namespace canoodleapi.Interfaces
         LoginQRGenerater SaveLoginQRGenerater(LoginQRGenerater loginQRGenerater);
         LoginQRGenerater CheckQrPasswordMatching(CheckQrInput checkQrInput);
         LoginQRGenerater CheckScannedQrISAvailable(string logindata);
+        LoginQRGenerater GetScannedQrISAvailable(int loginqrid);
 
 
     }

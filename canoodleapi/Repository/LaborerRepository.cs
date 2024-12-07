@@ -215,7 +215,7 @@ namespace canoodleapi.Repository
                 loginQRGenerater = con.Query<LoginQRGenerater>(sql, new { logindata = logindata, statusesid = LoginQrStatus.Generated }).FirstOrDefault();
                 if (loginQRGenerater != null)
                 {
-                    int statusid = (int)LoginQrStatus.Scanned;
+                   int statusid = (int)LoginQrStatus.Scanned;
                    UpdateReleasedStatus(loginQRGenerater.loginqrid, statusid);
                 }
 
@@ -262,6 +262,23 @@ namespace canoodleapi.Repository
                 }
             }
             throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
+        public LoginQRGenerater GetScannedQrISAvailable(int loginqrid)
+        {
+            try
+            {
+                LoginQRGenerater loginQRGenerater = new LoginQRGenerater();
+                string sql = "SELECT * FROM LoginQRGenerater where loginqrid=@loginqrid  and statusesid=@statusesid";
+                loginQRGenerater = con.Query<LoginQRGenerater>(sql, new { loginqrid = loginqrid, statusesid = LoginQrStatus.Scanned }).FirstOrDefault();
+              
+
+
+                return loginQRGenerater;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

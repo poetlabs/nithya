@@ -349,6 +349,45 @@ public class LaborerController : ControllerBase
         return apiResponse;
 
     }
+    [HttpGet]
+    [Route("GetScannedQrISAvailable/{loginqrid}")]
+    public ApiResponseModel GetScannedQrISAvailable(int loginqrid)
+    {
+
+        try
+        {
+            LoginQRGenerater loginQRGenerater = _laborerRepository.GetScannedQrISAvailable(loginqrid);
+            _jsonData = string.Empty;
+            if (loginQRGenerater != null)
+            {
+                resultResponse.Data = loginQRGenerater;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(loginQRGenerater);
+
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+
+    }
 
 
 }
