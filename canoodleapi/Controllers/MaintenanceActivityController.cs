@@ -189,8 +189,8 @@ public class MaintenanceActivityController : ControllerBase
     {
         try
         {
-            string path = Path.Combine(_webHostEnvironment.WebRootPath, "Documents");
-           // string FilePath = _iconfiguration.GetSection("Documents").GetSection("BulkOrders").Value;            
+            string path = Path.Combine(_webHostEnvironment.ContentRootPath, "Documents");
+            // string FilePath = _iconfiguration.GetSection("Documents").GetSection("BulkOrders").Value;            
             bool files = _activityRepository.UploadFiles(Filename, ActivityID, act, path);
 
 
@@ -225,6 +225,8 @@ public class MaintenanceActivityController : ControllerBase
         _jsonData = JsonConvert.SerializeObject(apiResponse);       
         return apiResponse;
     }
+
+   
 
 
 
