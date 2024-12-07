@@ -78,12 +78,12 @@ namespace canoodleapi.Repository
                     laborerLogin.Systemid = ips;
                     laborerLogin.Logindate = DateTime.Now;
                     laborerLogin.Updateddate = DateTime.UtcNow;
-                    laborerLogin.Loginqrid = 1;
-                    //  laborerLogin.Loginqrid = userlogin.loginqrid;
+                   // laborerLogin.Loginqrid = 1;
+                    laborerLogin.Loginqrid = userlogin.loginqrid;
                     laborerLogin.Laborerloginid = (int)SqlMapperExtensions.Insert(con, laborerLogin);
                     laborerLogin.Laborername = userexist.fullname;
-                  //  int statusid = Convert.ToInt32(LoginQrStatus.Completd);
-                   // UpdateReleasedStatus(userlogin.loginqrid, statusid);
+                    int statusid = Convert.ToInt32(LoginQrStatus.Completd);
+                    UpdateReleasedStatus(userlogin.loginqrid, statusid);
                 }
                 
 
