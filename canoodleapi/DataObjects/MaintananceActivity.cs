@@ -27,7 +27,7 @@ namespace canoodleapi.DataObjects
         public int? SpecificMonthofYear { get; set; }
         public int? IsHolidayApllicable { get; set; }
         public int? SpecificMinutes { get; set; }
-        
+        public string FilePath { get; set; }
 
         [Write(false)]
         public int IsSubActivityAvilable { get; set; }

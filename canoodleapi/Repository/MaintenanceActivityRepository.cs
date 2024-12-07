@@ -183,6 +183,23 @@ namespace canoodleapi.Repository
             }
             return isupadte;
         }
+        public MaintenanceActivities GetMaintenanceActivitiesByActivityID(int activityId)
+        {
+            MaintenanceActivities maintanceactivity = new MaintenanceActivities();
+            try
+            {
+                string sql = "SELECT * FROM MaintenanceActivities where activityId=@activityId";
+                maintanceactivity = con.Query<MaintenanceActivities>(sql, new { activityId = activityId }).FirstOrDefault();
+
+                return maintanceactivity;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return maintanceactivity;
+
+        }
 
 
 

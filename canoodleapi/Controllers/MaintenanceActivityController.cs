@@ -225,8 +225,49 @@ public class MaintenanceActivityController : ControllerBase
         _jsonData = JsonConvert.SerializeObject(apiResponse);       
         return apiResponse;
     }
+    [HttpGet]
+    [Route("GetUploadeddFile/{activityid}")]
+    public ApiResponseModel GetUploadeddFile(int activityid)
+    {
+        MaintenanceActivities maintanceact = new MaintenanceActivities();
+        try
+        {
+            maintanceact = _activityRepository.GetMaintenanceActivitiesByActivityID(activityid);
+            string path = Path.Combine(_webHostEnvironment.ContentRootPath, "Documents");
+            string filepath = path + '\\' + maintanceact.FilePath;
+            _jsonData = string.Empty;
+            if (filepath != null)
+            {
+                resultResponse.Data = filepath;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(filepath);
 
-   
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+
+    }
+
+
 
 
 
