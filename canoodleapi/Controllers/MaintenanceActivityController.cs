@@ -1,6 +1,7 @@
 ﻿using canoodleapi.DataObjects;
 using canoodleapi.Interfaces;
 using canoodleapi.Repository;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -15,14 +16,15 @@ public class MaintenanceActivityController : ControllerBase
     string _jsonData = string.Empty;
     IConfiguration _iconfiguration;
     private readonly IMaintenanceActivityRepository _activityRepository;
-
-    public MaintenanceActivityController(IMaintenanceActivityRepository activityRepository, IConfiguration iconfiguration)
+    private readonly IWebHostEnvironment _webHostEnvironment;
+    public MaintenanceActivityController(IMaintenanceActivityRepository activityRepository, IConfiguration iconfiguration, IWebHostEnvironment webHostEnvironment)
     {
         _activityRepository = activityRepository;
         resultResponse = new ResultResponseModel();
         apiResponse = new ApiResponseModel();
         apiResponse.Result = new ResultResponseModel();
         _iconfiguration = iconfiguration;
+        _webHostEnvironment = webHostEnvironment;
     }
     [HttpPost]
     [Route("SaveMaintenanceActivity")]
@@ -187,16 +189,16 @@ public class MaintenanceActivityController : ControllerBase
     {
         try
         {
-
-            string FilePath = _iconfiguration.GetSection("Documents").GetSection("BulkOrders").Value;            
-            bool files = _activityRepository.UploadFiles(Filename, ActivityID, act, FilePath);
+            string path = Path.Combine(_webHostEnvironment.WebRootPath, "Documents");
+           // string FilePath = _iconfiguration.GetSection("Documents").GetSection("BulkOrders").Value;            
+            bool files = _activityRepository.UploadFiles(Filename, ActivityID, act, path);
 
 
             if (files != null)
             {
-                resultResponse.Data = files;
+                resultResponse.Data = path;
                 resultResponse.IsError = false;
-                _jsonData = JsonConvert.SerializeObject(files);
+                _jsonData = JsonConvert.SerializeObject(path);
                
             }
             else

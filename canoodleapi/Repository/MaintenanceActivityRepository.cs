@@ -2,15 +2,18 @@
 using canoodleapi.Interfaces;
 using Dapper;
 using Dapper.Contrib.Extensions;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.Extensions.Options;
+using System.Web;
 
 namespace canoodleapi.Repository
 {
     public class MaintenanceActivityRepository : BaseRepository, IMaintenanceActivityRepository
     {
         private IOptions<AppSettings> _appSettings;
+
         public MaintenanceActivityRepository(IOptions<AppSettings> appSettings) : base(appSettings)
         {
             _appSettings = appSettings;
@@ -132,19 +135,26 @@ namespace canoodleapi.Repository
 
 
         }
-        public bool UploadFiles(string Filename, int ActivityID, [FromForm] IFormFile act,string FilePath)
+        
+        public bool UploadFiles(string Filename, int ActivityID, [FromForm] IFormFile act,string folderPath)
         {
             try
             {
                 if (act != null)
-                {
+                {                
 
-                    string path = FilePath + @"\" + Filename;
+                    string fn = System.IO.Path.GetFileName(Filename);
 
-                    if (!Directory.Exists(FilePath))
+                    if (!Directory.Exists(folderPath))
                     {
-                        Directory.CreateDirectory(FilePath);
+                        Directory.CreateDirectory(folderPath);
                     }
+                    string filePath = Path.Combine(folderPath, Filename);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        act.CopyToAsync(stream);
+                    }
+
                     UpdateFilePath(ActivityID, Filename);
                 }
                     return true;
