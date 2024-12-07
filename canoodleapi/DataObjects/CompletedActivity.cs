@@ -30,8 +30,9 @@ namespace canoodleapi.DataObjects
         public int Percentage { get; set; }
         [Write(false)]
         public int machineId { get; set; }
+        [Write(false)]
+        public string FilePath { get; set; }
         
-
 
 
 
