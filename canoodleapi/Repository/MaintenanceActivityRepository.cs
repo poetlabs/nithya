@@ -122,7 +122,7 @@ namespace canoodleapi.Repository
                     " inner join Machines m on ma.machineid=m.machineid " +
                     " WHERE  (mcintervalid = 4 AND SpecificDayOfWeek = (DATEPART(dw,getdate()))-1) " +
                     " OR (mcintervalid = 5 AND SpecificDayOfMonth = (DATEPART(d,getdate())))  " +
-                    " OR (mcintervalid = 3 AND ( (DATEPARt(hh,SpecificTime)) = (DATEPARt(hh,getdate()))) and (DATEPARt(n,SpecificTime)) = (DATEPARt(n,getdate()))) " +
+                    " OR (mcintervalid = 3 AND  CONVERT(DATE,SpecificTime)=CONVERT(DATE,getdate())) " +
                     " OR (mcintervalid=13 AND CONVERT(DATE,duedate) =CONVERT(DATE,getdate()))\r\n OR (mcintervalid = 6 AND SpecificMonthofYear=((DATEPARt(m,getdate()))) and SpecificDayOfMonth=((DATEPARt(d,getdate())))) ";
                 lstmcommon = con.Query<MaintenanceActivities>(sql, new { CurrentTime = CurrentTime, CurrentDayOfWeek = CurrentDayOfWeek, currentday = currentday, CurrentDateTime = CurrentDateTime }).ToList();
 
