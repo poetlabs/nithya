@@ -233,8 +233,8 @@ public class MaintenanceActivityController : ControllerBase
         try
         {
             maintanceact = _activityRepository.GetMaintenanceActivitiesByActivityID(activityid);
-            string path = Path.Combine(_webHostEnvironment.ContentRootPath, "Documents");
-            string filepath = path + '\\' + maintanceact.FilePath;
+           // string path = Path.Combine(_webHostEnvironment.ContentRootPath, "Documents");
+            string filepath = "Documents" + '/' + maintanceact.FilePath;
             _jsonData = string.Empty;
             if (filepath != null)
             {
