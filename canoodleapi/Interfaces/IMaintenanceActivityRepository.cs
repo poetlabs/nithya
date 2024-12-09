@@ -12,6 +12,7 @@ namespace canoodleapi.Interfaces
         List<SubActivities> Getallsubactivitybyid(int activityid);
         bool UploadFiles(string Filename, int ActivityID, [FromForm] IFormFile act, string FilePath);
         MaintenanceActivities GetMaintenanceActivitiesByActivityID(int activityId);
+        List<MaintenanceActivities> GetallMaintenanceActivities();
     }
 
 }

@@ -40,7 +40,13 @@ namespace canoodleapi.DataObjects
         [Write(false)]
         public string MachineName { get; set; }
         [Write(false)]
-        public string HistoryJson { get; set; }     
+        public string HistoryJson { get; set; }
+        [Write(false)]
+        public string Status { get; set; }
+        [Write(false)]
+        public string ActvityType { get; set; }
+        [Write(false)]
+        public string Interval { get; set; }
 
 
 

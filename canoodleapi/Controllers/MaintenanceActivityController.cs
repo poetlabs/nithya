@@ -266,6 +266,45 @@ public class MaintenanceActivityController : ControllerBase
         return apiResponse;
 
     }
+    [HttpGet]
+    [Route("GetallMaintenanceActivities")]
+    public ApiResponseModel GetallMaintenanceActivities()
+    {
+        try
+        {
+            List<MaintenanceActivities> lstmaintance = _activityRepository.GetallMaintenanceActivities();
+            _jsonData = string.Empty;
+            if (lstmaintance != null)
+            {
+                resultResponse.Data = lstmaintance;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(lstmaintance);
+
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+
+    }
 
 
 

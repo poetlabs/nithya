@@ -201,6 +201,24 @@ namespace canoodleapi.Repository
 
         }
 
+        public List<MaintenanceActivities> GetallMaintenanceActivities()
+        {
+            try
+            {
+                List<MaintenanceActivities> lstactivitysub = new List<MaintenanceActivities>();
+                string sql = "select Mc.mcommonname as Status,MC1.mcommonname as ActvityType,MC2.mcommonname as Interval,MA.* from MaintenanceActivities MA inner join MasterCommon MC on MA.mcstatusesid=MC.mcommonid inner join MasterCommon MC1 on MA.mcactivityTypeId=MC1.mcommonid inner join MasterCommon MC2 on MA.mcintervalid=MC2.mcommonid";
+                lstactivitysub = con.Query<MaintenanceActivities>(sql, new { }).ToList();
+
+                return lstactivitysub;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }
+
 
 
 
