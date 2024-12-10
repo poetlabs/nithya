@@ -47,7 +47,7 @@ namespace canoodleapi.Repository
             }
 
         }
-        private Laborers GetlaborerbyUsername(string username, int qpin)
+        public Laborers GetlaborerbyUsername(string username, int qpin)
         {
             try
             {
@@ -84,6 +84,7 @@ namespace canoodleapi.Repository
                     laborerLogin.Laborername = userexist.fullname;
                     int statusid = Convert.ToInt32(LoginQrStatus.Completd);
                     UpdateReleasedStatus(userlogin.loginqrid, statusid);
+                    laborerLogin.IsAdmin = userexist.IsAdmin;
                 }
                 
 

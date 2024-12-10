@@ -14,5 +14,7 @@ namespace canoodleapi.DataObjects
         public DateTime Updateddate { get; set; }
         [Write(false)]
         public string Laborername { get; set; }
+        [Write(false)]
+        public int? IsAdmin { get; set; }
     }
 }

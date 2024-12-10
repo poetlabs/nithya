@@ -388,6 +388,45 @@ public class LaborerController : ControllerBase
         return apiResponse;
 
     }
+    [HttpGet]
+    [Route("GetlaborerbyUsername/{username}/{qpin}")]
+    public ApiResponseModel GetlaborerbyUsername(string username,int qpin)
+    {
+
+        try
+        {
+            Laborers lbr = _laborerRepository.GetlaborerbyUsername(username, qpin);
+            _jsonData = string.Empty;
+            if (lbr != null)
+            {
+                resultResponse.Data = lbr;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(lbr);
+
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+
+    }
 
 
 }
