@@ -205,11 +205,18 @@ namespace canoodleapi.Repository
         {
             try
             {
-                List<MaintenanceActivities> lstactivitysub = new List<MaintenanceActivities>();
-                string sql = "select Mc.mcommonname as Status,MC1.mcommonname as ActvityType,MC2.mcommonname as Interval,MA.* from MaintenanceActivities MA inner join MasterCommon MC on MA.mcstatusesid=MC.mcommonid inner join MasterCommon MC1 on MA.mcactivityTypeId=MC1.mcommonid inner join MasterCommon MC2 on MA.mcintervalid=MC2.mcommonid";
-                lstactivitysub = con.Query<MaintenanceActivities>(sql, new { }).ToList();
-
-                return lstactivitysub;
+                List<MaintenanceActivities> lstactivity = new List<MaintenanceActivities>();
+                string sql = "select Mac.name as MachineName,Mc.mcommonname as Status,MC1.mcommonname as ActvityType,MC2.mcommonname as Interval,MA.* from MaintenanceActivities MA inner join MasterCommon MC on MA.mcstatusesid=MC.mcommonid inner join MasterCommon MC1 on MA.mcactivityTypeId=MC1.mcommonid inner join MasterCommon MC2 on MA.mcintervalid=MC2.mcommonid inner join Machines Mac on Ma.machineId=Mac.machineId";
+                lstactivity = con.Query<MaintenanceActivities>(sql, new { }).ToList();
+                lstactivity.ForEach(delegate (MaintenanceActivities main)
+                {
+                    List<SubActivities> lstsu = Getallsubactivitybyid(main.ActivityId);
+                    if (lstsu.Count>0)
+                    {
+                        main.IsSubActivityAvilable = 1;
+                    }
+                });
+                return lstactivity;
             }
             catch (Exception ex)
             {

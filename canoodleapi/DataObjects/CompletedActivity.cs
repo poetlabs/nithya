@@ -32,7 +32,10 @@ namespace canoodleapi.DataObjects
         public int machineId { get; set; }
         [Write(false)]
         public string FilePath { get; set; }
+        [Write(false)]
+        public int IsSubActivityAvilable { get; set; }
         
+
 
 
 

@@ -329,8 +329,17 @@ namespace canoodleapi.Repository
                    " inner join MasterCommon MC on c.mcStatusID=MC.mcommonid " +
                    " where C.mcStatusID in (@mcstatusesid) and laborerid=@laborerid";
                 }
+
                 lstcompactivites = con.Query<CompletedActivities>(sql, new { laborerid = laborerid, mcstatusesid = CompletedActivitiesStatus.Completed }).ToList();
 
+                lstcompactivites.ForEach(delegate (CompletedActivities main)
+                {
+                    List<SubActivities> lstsu = GetCompletedSubActivitybyActivityid(main.ActivityId, main.CompletionId);
+                    if (lstsu.Count > 0)
+                    {
+                        main.IsSubActivityAvilable = 1;
+                    }
+                });
                 return lstcompactivites;
 
             }
@@ -339,6 +348,7 @@ namespace canoodleapi.Repository
                 throw ex;
             }
         }
+
         public List<SubActivities> GetCompletedSubActivitybyActivityid(int activityID, int CompletionId)
         {
             try
