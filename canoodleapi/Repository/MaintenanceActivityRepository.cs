@@ -226,6 +226,32 @@ namespace canoodleapi.Repository
 
         }
 
+        public SubActivities UpdateSubActivity(SubActivities subActivities)
+        {
+            try
+            {
+                if (subActivities.SubActivityId > 0)
+                {
+                    subActivities.Updateddate = DateTime.UtcNow;
+                    SqlMapperExtensions.Update(con, subActivities);
+                }
+                else
+                {
+
+                    subActivities.Updateddate = DateTime.UtcNow;
+                    subActivities.SubActivityId = (int)SqlMapperExtensions.Insert(con, subActivities);
+
+                }
+                return subActivities;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
 
 
