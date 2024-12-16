@@ -26,14 +26,14 @@ namespace canoodleapi.Repository
             {
                 if (laborer.LaborerId > 0)
                 {
-                    laborer.updateddate = DateTime.UtcNow;
+                    laborer.updateddate = DateTime.Now;
                     SqlMapperExtensions.Update(con, laborer);
                 }
                 else
                 {
                     laborer.mcjourneystatusid = Convert.ToInt32(Status.Active);
-                    laborer.updateddate = DateTime.UtcNow;
-                    laborer.StartedAt = DateTime.UtcNow;
+                    laborer.updateddate = DateTime.Now;
+                    laborer.StartedAt = DateTime.Now;
                     laborer.LaborerId = (int)SqlMapperExtensions.Insert(con, laborer);
 
                 }
@@ -77,7 +77,7 @@ namespace canoodleapi.Repository
                     laborerLogin.Laborerid = userexist.LaborerId;
                     laborerLogin.Systemid = ips;
                     laborerLogin.Logindate = DateTime.Now;
-                    laborerLogin.Updateddate = DateTime.UtcNow;
+                    laborerLogin.Updateddate = DateTime.Now;
                    // laborerLogin.Loginqrid = 1;
                     laborerLogin.Loginqrid = userlogin.loginqrid;
                     laborerLogin.Laborerloginid = (int)SqlMapperExtensions.Insert(con, laborerLogin);
@@ -169,14 +169,14 @@ namespace canoodleapi.Repository
             {
                 if (loginQRGenerater.loginqrid > 0)
                 {
-                    loginQRGenerater.updateddate = DateTime.UtcNow;
+                    loginQRGenerater.updateddate = DateTime.Now;
                     SqlMapperExtensions.Update(con, loginQRGenerater);
                 }
                 else
                 {
                     loginQRGenerater.statusesid = Convert.ToInt32(LoginQrStatus.Generated);
-                    loginQRGenerater.updateddate = DateTime.UtcNow;
-                    loginQRGenerater.generatedat = DateTime.UtcNow;
+                    loginQRGenerater.updateddate = DateTime.Now;
+                    loginQRGenerater.generatedat = DateTime.Now;
                     loginQRGenerater.passcode = RandomKeyGenerator();
                     loginQRGenerater.loginqrid = (int)SqlMapperExtensions.Insert(con, loginQRGenerater);
 

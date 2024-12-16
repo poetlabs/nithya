@@ -90,13 +90,13 @@ namespace canoodleapi.Repository
                 CompletedActivities completedActivities = new CompletedActivities();
                 if (laborVisit.VisitId > 0)
                 {
-                    laborVisit.updateddate = DateTime.UtcNow;
+                    laborVisit.updateddate = DateTime.Now;
                     SqlMapperExtensions.Update(con, laborVisit);
                 }
                 else
                 {
-                    laborVisit.updateddate = DateTime.UtcNow;
-                    laborVisit.VisitStart = DateTime.UtcNow;
+                    laborVisit.updateddate = DateTime.Now;
+                    laborVisit.VisitStart = DateTime.Now;
                     laborVisit.mcStatusID = (int)LaborerVisitsStatus.Active;
                     laborVisit.VisitId = (int)SqlMapperExtensions.Insert(con, laborVisit);
 
@@ -125,12 +125,12 @@ namespace canoodleapi.Repository
 
                 if (completedActivities.CompletionId > 0)
                 {
-                    completedActivities.updateddate = DateTime.UtcNow;
+                    completedActivities.updateddate = DateTime.Now;
                     SqlMapperExtensions.Update(con, completedActivities);
                 }
                 else
                 {
-                    completedActivities.updateddate = DateTime.UtcNow;
+                    completedActivities.updateddate = DateTime.Now;
                     completedActivities.CompletionId = (int)SqlMapperExtensions.Insert(con, completedActivities);
 
                     List<SubActivities> lstsubactivity = GetAllSubActivities(completedActivities.ActivityId);
@@ -166,13 +166,13 @@ namespace canoodleapi.Repository
                     if (completedSubActivity.CompletedSubActivityID > 0)
 
                     {
-                        completedSubActivity.UpdatedDate = DateTime.UtcNow;
+                        completedSubActivity.UpdatedDate = DateTime.Now;
                         SqlMapperExtensions.Update(con, completedSubActivity);
                     }
                     else
                     {
 
-                        completedSubActivity.UpdatedDate = DateTime.UtcNow;
+                        completedSubActivity.UpdatedDate = DateTime.Now;
                         completedSubActivity.CompletedSubActivityID = (int)SqlMapperExtensions.Insert(con, completedSubActivity);
 
                     }
@@ -207,13 +207,13 @@ namespace canoodleapi.Repository
                 if (completedSubActivity.CompletedSubActivityID > 0)
                 {
                     completedSubActivity.McStatusID = (int)CompletedActivitiesStatus.Submitted;
-                    completedSubActivity.UpdatedDate = DateTime.UtcNow;
+                    completedSubActivity.UpdatedDate = DateTime.Now;
                     SqlMapperExtensions.Update(con, completedSubActivity);
                 }
                 else
                 {
 
-                    completedSubActivity.UpdatedDate = DateTime.UtcNow;
+                    completedSubActivity.UpdatedDate = DateTime.Now;
                     completedSubActivity.CompletionId = (int)SqlMapperExtensions.Insert(con, completedSubActivity);
 
 
@@ -447,7 +447,7 @@ namespace canoodleapi.Repository
             {
                 if (completedActivities.CompletionId > 0)
                 {
-                    completedActivities.updateddate = DateTime.UtcNow;
+                    completedActivities.updateddate = DateTime.Now;
                     completedActivities.mcStatusID = (int)CompletedActivitiesStatus.Submitted;
                     SqlMapperExtensions.Update(con, completedActivities);
                 }
@@ -465,7 +465,7 @@ namespace canoodleapi.Repository
             {
                 if (completedsubActivities.CompletedSubActivityID > 0)
                 {
-                    completedsubActivities.UpdatedDate = DateTime.UtcNow;
+                    completedsubActivities.UpdatedDate = DateTime.Now;
                     completedsubActivities.McStatusID = (int)CompletedActivitiesStatus.Submitted;
                     SqlMapperExtensions.Update(con, completedsubActivities);
                 }

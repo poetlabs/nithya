@@ -22,13 +22,13 @@ namespace canoodleapi.Repository
             {
                 if (machines.MachineId > 0)
                 {
-                    machines.Updateddate = DateTime.UtcNow;
+                    machines.Updateddate = DateTime.Now;
                     SqlMapperExtensions.Update(con, machines);
                 }
                 else
                 {
                     machines.mcstatusID = (int)Status.Active;
-                    machines.Updateddate = DateTime.UtcNow;
+                    machines.Updateddate = DateTime.Now;
                     machines.MachineId = (int)SqlMapperExtensions.Insert(con, machines);
 
                 }

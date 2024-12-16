@@ -25,13 +25,13 @@
 
                 if (routes.RouteId > 0)
                 {
-                    routes.Updateddate = DateTime.UtcNow;
+                    routes.Updateddate = DateTime.Now;
                     SqlMapperExtensions.Update(con, routes);
                 }
                 else
                 {
                     routes.mcstatusID = (int)Status.Active;
-                    routes.Updateddate = DateTime.UtcNow;
+                    routes.Updateddate = DateTime.Now;
                     int id = (int)SqlMapperExtensions.Insert(con, routes);
                  
                 }
@@ -107,13 +107,13 @@
 
                 if (shift.ShiftID > 0)
                 {
-                    shift.updatedDate = DateTime.UtcNow;
+                    shift.updatedDate = DateTime.Now;
                     SqlMapperExtensions.Update(con, shift);
                 }
                 else
                 {
                     shift.McStatusID = (int)Status.Active;
-                    shift.updatedDate = DateTime.UtcNow;
+                    shift.updatedDate = DateTime.Now;
                     int id = (int)SqlMapperExtensions.Insert(con, shift);
 
                 }
@@ -152,13 +152,13 @@
 
                 if (role.RoleID > 0)
                 {
-                    role.UpdatedDate = DateTime.UtcNow;
+                    role.UpdatedDate = DateTime.Now;
                     SqlMapperExtensions.Update(con, role);
                 }
                 else
                 {
                     role.McStatusID = (int)Status.Active;
-                    role.UpdatedDate = DateTime.UtcNow;
+                    role.UpdatedDate = DateTime.Now;
                     int id = (int)SqlMapperExtensions.Insert(con, role);
 
                 }
@@ -196,13 +196,13 @@
                     if (roleRouteMapping.RoleRouteMappingID > 0)
 
                     {
-                        roleRouteMapping.UpdatedDate = DateTime.UtcNow;
+                        roleRouteMapping.UpdatedDate = DateTime.Now;
                         SqlMapperExtensions.Update(con, roleRouteMapping);
                     }
                     else
                     {
 
-                        roleRouteMapping.UpdatedDate = DateTime.UtcNow;
+                        roleRouteMapping.UpdatedDate = DateTime.Now;
                         roleRouteMapping.McStatusID = (int)Status.Active;
                         roleRouteMapping.RoleRouteMappingID = (int)SqlMapperExtensions.Insert(con, roleRouteMapping);
 

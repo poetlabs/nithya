@@ -27,12 +27,12 @@ namespace canoodleapi.Repository
             {
                 if (maintenanceActivity.ActivityId > 0)
                 {
-                    maintenanceActivity.updateddate = DateTime.UtcNow;
+                    maintenanceActivity.updateddate = DateTime.Now;
                     SqlMapperExtensions.Update(con, maintenanceActivity);
                 }
                 else
                 {
-                    maintenanceActivity.updateddate = DateTime.UtcNow;
+                    maintenanceActivity.updateddate = DateTime.Now;
                     // maintenanceActivity.SpecificTime = "12:01:00.0000000";
                     maintenanceActivity.ActivityId = (int)SqlMapperExtensions.Insert(con, maintenanceActivity);
 
@@ -47,7 +47,7 @@ namespace canoodleapi.Repository
                             else
                             {
                                 subActivity.ActivityId = maintenanceActivity.ActivityId;
-                                subActivity.Updateddate = DateTime.UtcNow;
+                                subActivity.Updateddate = DateTime.Now;
                                 subActivity.SubActivityId = (int)SqlMapperExtensions.Insert(con, subActivity);
                             }
                         });
@@ -233,13 +233,13 @@ namespace canoodleapi.Repository
             {
                 if (subActivities.SubActivityId > 0)
                 {
-                    subActivities.Updateddate = DateTime.UtcNow;
+                    subActivities.Updateddate = DateTime.Now;
                     SqlMapperExtensions.Update(con, subActivities);
                 }
                 else
                 {
 
-                    subActivities.Updateddate = DateTime.UtcNow;
+                    subActivities.Updateddate = DateTime.Now;
                     subActivities.SubActivityId = (int)SqlMapperExtensions.Insert(con, subActivities);
 
                 }
