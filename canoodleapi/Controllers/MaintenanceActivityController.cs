@@ -306,7 +306,7 @@ public class MaintenanceActivityController : ControllerBase
 
     }
     [HttpPost]
-    [Route("c")]
+    [Route("UpdateSubActivity")]
     public ApiResponseModel UpdateSubActivity([FromBody] SubActivities subactivity)
     {
         try
@@ -345,6 +345,47 @@ public class MaintenanceActivityController : ControllerBase
         _jsonData = JsonConvert.SerializeObject(apiResponse);
         return apiResponse;
     }
+    [HttpGet]
+    [Route("GetallMaintenanceActivitiesByActivityID/{activityid}")]
+    public ApiResponseModel GetallMaintenanceActivitiesByActivityID(int activityid)
+    {
+        MaintenanceActivities maintanceact = new MaintenanceActivities();
+        try
+        {
+            maintanceact = _activityRepository.GetallMaintenanceActivitiesByActivityID(activityid);
+            // string path = Path.Combine(_webHostEnvironment.ContentRootPath, "Documents");
+           
+            _jsonData = string.Empty;
+            if (maintanceact != null)
+            {
+                resultResponse.Data = maintanceact;
+                resultResponse.IsError = false;
+                _jsonData = JsonConvert.SerializeObject(maintanceact);
+
+            }
+            else
+            {
+                resultResponse.Data = null;
+                resultResponse.Message = Enum.GetName(typeof(ResponseMessages), ResponseMessages.NoValueReturned);
+                _jsonData = "{\"NoData\":\"" + resultResponse.Message + "\"}";
+
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            resultResponse.IsError = true;
+            resultResponse.Message = ex.Message;
+            resultResponse.StackTrace = ex.StackTrace;
+            _jsonData = "{\"Error\":\"" + ex.Message + "\"}";
+
+        }
+        apiResponse.Result = resultResponse;
+        _jsonData = JsonConvert.SerializeObject(apiResponse);
+        return apiResponse;
+
+    }   
 
 
 

@@ -252,6 +252,29 @@ namespace canoodleapi.Repository
                 throw ex;
             }
         }
+        public MaintenanceActivities GetallMaintenanceActivitiesByActivityID(int activityID)
+        {
+            try
+            {
+                MaintenanceActivities mainactivity = new MaintenanceActivities();
+                string sql = "select Mac.name as MachineName,Mc.mcommonname as Status,MC1.mcommonname as ActvityType,MC2.mcommonname as Interval,MA.* from MaintenanceActivities MA inner join MasterCommon MC on MA.mcstatusesid=MC.mcommonid inner join MasterCommon MC1 on MA.mcactivityTypeId=MC1.mcommonid inner join MasterCommon MC2 on MA.mcintervalid=MC2.mcommonid inner join Machines Mac on Ma.machineId=Mac.machineId where activityId=@activityId";
+                mainactivity = con.Query<MaintenanceActivities>(sql, new { activityId= activityID }).FirstOrDefault();
+                
+                    List<SubActivities> lstsu = Getallsubactivitybyid(activityID);
+                    if (lstsu.Count > 0)
+                    {
+                    mainactivity.SubActivitieslist = lstsu;
+                    }
+               
+                return mainactivity;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }
 
 
 

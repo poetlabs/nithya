@@ -14,6 +14,7 @@ namespace canoodleapi.Interfaces
         MaintenanceActivities GetMaintenanceActivitiesByActivityID(int activityId);
         List<MaintenanceActivities> GetallMaintenanceActivities();
         SubActivities UpdateSubActivity(SubActivities subActivities);
+        MaintenanceActivities GetallMaintenanceActivitiesByActivityID(int activityID);
     }
 
 }
