@@ -11,6 +11,8 @@ namespace canoodleapi.DataObjects
         public DateTime Updateddate { get; set; }
         public int mcstatusID { get; set; }
         public int ShiftID { get; set; }
+        [Write(false)]
+        public string ShiftName { get; set; }
 
     }
 }

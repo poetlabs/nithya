@@ -49,7 +49,7 @@
             List<Routes> lstmachines = new List<Routes>();
             try
             {
-                string sql = "SELECT * FROM Routes where mcstatusID=@mcstatusID ";
+                string sql = "SELECT S.ShiftName,R.* FROM Routes R inner join Shift S on R.ShiftID=S.ShiftID where mcstatusID=@mcstatusID ";
                 lstmachines = con.Query<Routes>(sql,new { mcstatusID=Status.Active }).AsList();
                 return lstmachines;
             }

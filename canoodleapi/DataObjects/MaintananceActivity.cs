@@ -28,6 +28,7 @@ namespace canoodleapi.DataObjects
         public int? IsHolidayApllicable { get; set; }
         public int? SpecificMinutes { get; set; }
         public string FilePath { get; set; }
+        public DateTime? LastRunDate { get; set; }
 
         [Write(false)]
         public int IsSubActivityAvilable { get; set; }

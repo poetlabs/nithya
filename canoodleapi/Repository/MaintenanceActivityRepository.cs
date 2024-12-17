@@ -33,7 +33,14 @@ namespace canoodleapi.Repository
                 else
                 {
                     maintenanceActivity.updateddate = DateTime.Now;
-                    // maintenanceActivity.SpecificTime = "12:01:00.0000000";
+                    if (maintenanceActivity.mcintervalid==3)
+                    {
+                        maintenanceActivity.LastRunDate = DateTime.Now.AddDays(-1);
+                    }
+                    else
+                    {
+                        maintenanceActivity.LastRunDate = DateTime.Now;
+                    }
                     maintenanceActivity.ActivityId = (int)SqlMapperExtensions.Insert(con, maintenanceActivity);
 
                     if (maintenanceActivity.IsSubActivityAvilable == 1)
@@ -125,6 +132,10 @@ namespace canoodleapi.Repository
                     " OR (mcintervalid = 18 AND SpecificMinutes = 60)  " +
                     " OR (mcintervalid = 3 AND  CONVERT(DATE,SpecificTime)=CONVERT(DATE,getdate())) " +
                     " OR (mcintervalid=13 AND CONVERT(DATE,duedate) =CONVERT(DATE,getdate())) OR (mcintervalid = 6 AND SpecificMonthofYear=((DATEPARt(m,getdate()))) and SpecificDayOfMonth=((DATEPARt(d,getdate())))) ";
+                //string sql = "SELECT case when ca.mcStatusID in (11) then 0 else ca.mcStatusID end as CompletedStatusID,ca.CompletionId as CompletionId,m.name as MachineName,ca.HistoryJson,ma.* " +
+                //   " FROM MaintenanceActivities ma " +
+                //   " inner join CompletedActivities ca on ma.activityId=ca.activityId and ca.mcStatusID  in (19)  " +
+                //   " inner join Machines m on ma.machineid=m.machineid";
                 lstmcommon = con.Query<MaintenanceActivities>(sql, new { CurrentTime = CurrentTime, CurrentDayOfWeek = CurrentDayOfWeek, currentday = currentday, CurrentDateTime = CurrentDateTime }).ToList();
 
                 return lstmcommon;
